@@ -170,7 +170,6 @@ export default function ContactPage() {
                   </form>
                 ) : (
                   <div role="status" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <span aria-hidden="true" style={{ width: 48, height: 1, background: "var(--accent)" }} />
                     <Display size="sm">Thank you.</Display>
                     <p style={{ margin: 0, font: "400 17px/1.6 var(--font-sans)", color: "var(--fg-muted)" }}>
                       Your message has not been sent anywhere yet &mdash; this form still needs connecting to a

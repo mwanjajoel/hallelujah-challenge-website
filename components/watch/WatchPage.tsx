@@ -81,10 +81,6 @@ export default function WatchPage() {
   const timerLabel =
     now === null ? "Tonight's session countdown" : "Tonight's session begins in " + +hh + " hours, " + +mm + " minutes";
 
-  // Fraction of the run-up elapsed; drives how high the horizon line sits.
-  const p = now === null ? 0 : live ? 1 : Math.min(1, Math.max(0, 1 - rem / (6 * 3600000)));
-  const horizonBottom = (6 + p * 30).toFixed(1) + "%";
-
   // Locale- and timezone-dependent, so it only renders once mounted.
   const localTime =
     now === null
@@ -282,19 +278,6 @@ export default function WatchPage() {
                     </div>
                   )}
 
-                  <div
-                    aria-hidden="true"
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      right: 0,
-                      bottom: horizonBottom,
-                      height: 1,
-                      background: "linear-gradient(90deg, transparent, var(--accent) 30%, #F2D898 50%, var(--accent) 70%, transparent)",
-                      boxShadow: "0 0 20px 1px rgba(212,166,74,.45)",
-                      transition: "bottom 1.4s var(--ease)",
-                    }}
-                  />
                 </Card>
               </Reveal>
 
@@ -409,7 +392,6 @@ export default function WatchPage() {
                     <p id="tonight-h" style={{ ...EYEBROW, color: "var(--fg-muted)" }}>
                       TONIGHT &#183; HE SITS ENTHRONED
                     </p>
-                    <span aria-hidden="true" style={{ width: 40, height: 1, background: "var(--accent)" }} />
                     <blockquote
                       style={{
                         margin: 0,

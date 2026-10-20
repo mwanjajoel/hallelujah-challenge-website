@@ -1,0 +1,28 @@
+COOKIES POLICY
+This Cookies and Similar Technologies Policy (this “Policy”) provides you with general information about cookies and similar technologies (collectively, “Tracking Technologies”) as well as how and for what purposes Hallelujah Challenge (“we”, “us” or “our”) uses such Tracking Technologies on our platform.
+To ensure you have a customized and seamless spiritual experience on our Site, we use cookies to understand how you interact with our content. This Policy explains what these technologies are and how you can control them. For any questions, please contact us at [Insert Support Email].
+1. WHAT IS A COOKIE?
+Cookies are small data files stored on your browser or device. They allow us to recognize your device and "remember" certain information (like your login status or preferences) to improve your experience. We also use web beacons, tags, and scripts to analyze our Service and monitor the effectiveness of our ministry communications.
+2. TYPES OF COOKIES WE USE
+2.1. Strictly Necessary Cookies
+These are essential for the Platform to function. They enable secure logins, protect against fraudulent activity, and allow you to access the core features of the Hallelujah Challenge. Without these, the site cannot perform as intended.
+2.2. Functional Cookies (Preference Cookies)
+These cookies remember your settings, such as your preferred language, region, or customized dashboard settings. While you can block these, your preferences will be lost each time you visit.
+2.3. Analytics and Performance Cookies
+These help us measure how users interact with our site (e.g., which pages are visited most during a live session). We use these to improve our technical performance and user interface.
+• Google Analytics: We use this to track traffic and monitor site usage. This data is shared with Google to help us contextualize our reach. Google’s Privacy & Terms.
+2.4. Advertising and Profiling Cookies
+These cookies track your browsing behavior to help us segment our community and deliver relevant ministry updates or event information. They help us understand which users engage with certain sessions to better tailor our future content and marketing strategies.
+3. THIRD-PARTY ANALYTICS
+We may use third-party Service Providers to monitor and analyze the use of our Service. For example, if you receive an email from us, we may use analytics tools to see if the message was opened or if specific links were clicked. This helps us gauge the effectiveness of our outreach.
+4. COMBINED AND AGGREGATED DATA
+We may combine information collected through Tracking Technologies with information from other sources (online or offline) to improve our services. Additionally, we may use Aggregate/De-Identified Data (data that can no longer be linked to you personally) for research, reporting, or sharing with partners and sponsors to show the impact of the Hallelujah Challenge.
+5. YOUR CHOICES: HOW TO CONTROL COOKIES
+You have the right to decide whether to accept or reject cookies.
+• Browser Settings: Most web browsers automatically accept cookies, but you can usually modify your settings to decline them. Consult your browser’s “Help” function for instructions.
+• Cookie Banner: You can manage your preferences directly through the cookie consent banner that appears when you first visit our site.
+• Mobile Devices: Your mobile device may allow you to control cookies through its settings function.
+Note: If you choose to decline or delete cookies, some portions of the Hallelujah Challenge Platform may not function properly, and you may lose access to certain personalized features.
+6. CONTACT US
+If you have any questions or comments about our use of Tracking Technologies, please reach out to us:
+• Email: info@hallelujahchallengelive.com

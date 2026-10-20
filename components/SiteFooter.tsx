@@ -151,15 +151,15 @@ export default function SiteFooter() {
             ©2026 by Hallelujah Challenge Gospel Music Initiative
           </p>
           <nav aria-label="Legal" style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-            <a href="#" className="hc-t hc-legallink" style={LEGAL}>
+            <Link href="/privacy" className="hc-t hc-legallink" style={LEGAL}>
               Privacy Policy
-            </a>
-            <a href="#" className="hc-t hc-legallink" style={LEGAL}>
+            </Link>
+            <Link href="/cookies" className="hc-t hc-legallink" style={LEGAL}>
               Cookies
-            </a>
-            <a href="#" className="hc-t hc-legallink" style={LEGAL}>
+            </Link>
+            <Link href="/terms" className="hc-t hc-legallink" style={LEGAL}>
               Terms And Conditions
-            </a>
+            </Link>
           </nav>
         </div>
       </div>

@@ -315,7 +315,6 @@ export default function HomePage() {
         >
           <Reveal as="figure" style={{ margin: 0, display: "flex", flexDirection: "column", gap: 28 }}>
             <p id="test-h" style={{ ...EYEBROW, color: "var(--ember)", display: "flex", alignItems: "center", gap: 14 }}>
-              <span aria-hidden="true" style={{ width: 30, height: 1, background: "var(--ember)" }} />
               HEALED FROM BACK PAIN
             </p>
             <blockquote
@@ -343,7 +342,6 @@ export default function HomePage() {
                 color: "var(--cream)",
               }}
             >
-              <span aria-hidden="true" style={{ width: 30, height: 1, background: "var(--ember)" }} />
               OLU
             </figcaption>
           </Reveal>

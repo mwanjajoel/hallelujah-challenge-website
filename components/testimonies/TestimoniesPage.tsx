@@ -247,7 +247,6 @@ export default function TestimoniesPage() {
                     <figcaption
                       style={{ display: "flex", alignItems: "center", gap: 12, font: "600 15px/1.3 var(--font-sans)" }}
                     >
-                      <span aria-hidden="true" style={{ width: 24, height: 1, background: "#B8892F" }} />
                       {t.name}, {t.country}
                     </figcaption>
                   </figure>
@@ -400,7 +399,6 @@ export default function TestimoniesPage() {
                     border: "1px solid #e5dfd2",
                   }}
                 >
-                  <span aria-hidden="true" style={{ width: 48, height: 1, background: "#B8892F" }} />
                   <Display size="sm">Thank you for testifying.</Display>
                   <p style={{ margin: 0, font: "400 17px/1.6 var(--font-sans)", color: "var(--panel-muted)" }}>
                     Our team reads every testimony. Keep praising.
