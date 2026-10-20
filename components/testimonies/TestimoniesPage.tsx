@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import ArrowLink from "@/components/ui/ArrowLink";
@@ -8,32 +8,38 @@ import Card from "@/components/ui/Card";
 import Display, { Accent } from "@/components/ui/Display";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
+import raw from "@/content/live/testimonies.json";
 
-const RAW: Array<[quote: string, name: string, country: string, cat: string]> = [
-  ["I reside in the USA, and God healed me.", "Grace", "USA", "Healing"],
-  ["After seven years of waiting, our son was born during the June edition.", "Adaeze", "Nigeria", "Family"],
-  ["My visa was refused twice. I praised every night of the challenge, and this month it was approved.", "Kwame", "Ghana", "Visa"],
-  ["I lost my job in March. On Day 9 I received an offer letter.", "Tunde", "United Kingdom", "Career"],
-  ["We cleared a debt our family had carried for four years.", "Wanjiru", "Kenya", "Finances"],
-  ["I came for the music. On the third night I gave my life to Jesus.", "Daniel", "Canada", "Salvation"],
-  ["My mother and I had not spoken in two years. Now we join at 11:59 together.", "Ruth", "South Africa", "Family"],
-  ["The doctors were cautious. We kept praising. My scan came back clear.", "Ifeoma", "Ireland", "Healing"],
-  ["I was promoted after four years in the same role. I dressed like my miracle every night.", "Chinedu", "Nigeria", "Career"],
-  ["Our study visas came through in the same week.", "Esi", "Ghana", "Visa"],
-  ["My husband, who never prayed, now sets the alarm for 11:59.", "Amaka", "USA", "Salvation"],
-  ["A business I had given up on received its first big contract.", "Joseph", "Tanzania", "Finances"],
-];
+/**
+ * The real archive, extracted from the ministry's own blog at
+ * hallelujahchallengelive.com/blog — 110 testimonies, verbatim, with the
+ * post each one came from.
+ *
+ * This replaced twelve invented testimonies that had stood here: made-up
+ * quotes attributed to made-up people in named countries. One of them was a
+ * real person's words from the live home page re-attributed to a different
+ * name. Nothing on this page is written by us now; it is quoted, and every
+ * card links back to its source so a reader can check.
+ *
+ * The live posts carry no country, and their categories could not be read
+ * reliably (the blog's category listings paginate client-side, so only the
+ * first seven of each are reachable). So neither is shown. The filters that
+ * used to offer them are gone rather than filled with guesses.
+ */
+interface Testimony {
+  slug: string;
+  title: string;
+  date: string;
+  url: string;
+  /** The name the writer signed off with, where they signed one. */
+  signature: string;
+  body: string[];
+}
 
-const TESTIMONIES = RAW.map(([quote, name, country, cat]) => ({
-  quote,
-  name,
-  country,
-  cat,
-  catUpper: cat.toUpperCase(),
-}));
+const TESTIMONIES = raw as Testimony[];
 
-const CATS = ["All", "Healing", "Family", "Career", "Visa", "Finances", "Salvation"];
-const COUNTRIES = ["All countries", ...[...new Set(TESTIMONIES.map((t) => t.country))].sort()];
+/** How many to show before the reader asks for more. */
+const PAGE = 12;
 
 const FIELD: CSSProperties = {
   minHeight: 52,
@@ -59,8 +65,8 @@ const EYEBROW: CSSProperties = {
 };
 
 export default function TestimoniesPage() {
-  const [cat, setCat] = useState("All");
-  const [country, setCountry] = useState("All countries");
+  const [query, setQuery] = useState("");
+  const [shown, setShown] = useState(PAGE);
   const [consent, setConsent] = useState(false);
   const [sent, setSent] = useState(false);
   const [width, setWidth] = useState(1280);
@@ -71,9 +77,17 @@ export default function TestimoniesPage() {
     return () => ro.disconnect();
   }, []);
 
-  const list = TESTIMONIES.filter(
-    (t) => (cat === "All" || t.cat === cat) && (country === "All countries" || t.country === country),
-  );
+  // Searching the whole archive, title and body alike — with 110 of them,
+  // scrolling is not a way to find the one about a visa or a job.
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return TESTIMONIES;
+    return TESTIMONIES.filter(
+      (t) => t.title.toLowerCase().includes(q) || t.body.join(" ").toLowerCase().includes(q),
+    );
+  }, [query]);
+
+  const list = matches.slice(0, shown);
   const cols = width < 700 ? 1 : width < 1060 ? 2 : 3;
 
   return (
@@ -137,123 +151,119 @@ export default function TestimoniesPage() {
             All testimonies
           </h2>
 
-          <Reveal
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              gap: 16,
-              marginBottom: 26,
-            }}
-          >
-            <div role="group" aria-label="Filter by category" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {CATS.map((c) => {
-                const sel = cat === c;
-                return (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setCat(c)}
-                    aria-pressed={sel}
-                    className="hc-t hc-pill-outline"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 6,
-                      minHeight: 44,
-                      padding: "0 18px",
-                      borderRadius: "var(--r-pill)",
-                      border: "1px solid " + (sel ? "var(--panel)" : "var(--hairline-strong)"),
-                      background: sel ? "var(--panel)" : "transparent",
-                      color: sel ? "var(--on-panel)" : "var(--fg)",
-                      font: "500 15px/1 var(--font-sans)",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {sel && <span aria-hidden="true">&#10003;</span>}
-                    {c}
-                  </button>
-                );
-              })}
-            </div>
-
+          <Reveal style={{ marginBottom: 26 }}>
             <label
-              style={{ display: "flex", flexDirection: "column", gap: 6, font: "500 13px/1 var(--font-sans)", color: "var(--fg-muted)" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                maxWidth: 420,
+                font: "500 13px/1 var(--font-sans)",
+                color: "var(--fg-muted)",
+              }}
             >
-              Country
-              <select
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
+              Search the testimonies
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setShown(PAGE);
+                }}
+                placeholder="healing, visa, job, school fees…"
                 className="hc-t hc-input"
                 style={{
                   minHeight: 48,
-                  minWidth: 200,
                   padding: "0 14px",
                   borderRadius: "var(--r-sm)",
                   background: "var(--surface)",
                   border: "1px solid var(--hairline-strong)",
                   color: "var(--fg)",
-                  font: "500 16px/1 var(--font-sans)",
+                  font: "400 16px/1 var(--font-sans)",
                 }}
-              >
-                {COUNTRIES.map((o) => (
-                  <option key={o} value={o}>
-                    {o}
-                  </option>
-                ))}
-              </select>
+              />
             </label>
           </Reveal>
 
           <p aria-live="polite" style={{ margin: "0 0 20px", font: "400 15px/1 var(--font-sans)", color: "var(--fg-muted)" }}>
-            Showing {list.length} {list.length === 1 ? "testimony" : "testimonies"}
+            Showing {list.length} of {matches.length} {matches.length === 1 ? "testimony" : "testimonies"}
           </p>
 
           <div style={{ columns: cols, columnGap: 16 }}>
             {list.map((t, i) => (
               <Reveal
-                key={t.name + t.country + t.cat}
+                key={t.slug}
                 variant="sharpen"
                 index={i % 6}
                 style={{ breakInside: "avoid", marginBottom: 16 }}
               >
                 <Card variant="cream" radius="md" style={{ padding: 28 }}>
-                  <figure style={{ margin: 0, display: "flex", flexDirection: "column", gap: 20 }}>
-                    <span
-                      style={{
-                        alignSelf: "flex-start",
-                        padding: "5px 10px",
-                        borderRadius: "var(--r-pill)",
-                        background: "#E08A4F",
-                        color: "var(--ink)",
-                        font: "500 11px/1 var(--font-mono)",
-                        letterSpacing: ".06em",
-                      }}
-                    >
-                      {t.catUpper}
-                    </span>
-                    <blockquote
+                  <figure style={{ margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+                    <h3
                       style={{
                         margin: 0,
                         fontFamily: "var(--font-display)",
                         fontSize: 25,
-                        lineHeight: 1.3,
+                        lineHeight: 1.25,
+                        fontWeight: 400,
                         textWrap: "pretty",
                       }}
                     >
-                      &ldquo;{t.quote}&rdquo;
+                      {t.title}
+                    </h3>
+                    <blockquote style={{ margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                      {t.body.map((para, n) => (
+                        <p key={n} style={{ margin: 0, font: "400 16px/1.65 var(--font-sans)", textWrap: "pretty" }}>
+                          {para}
+                        </p>
+                      ))}
                     </blockquote>
-                    <figcaption
-                      style={{ display: "flex", alignItems: "center", gap: 12, font: "600 15px/1.3 var(--font-sans)" }}
-                    >
-                      {t.name}, {t.country}
+                    <figcaption style={{ font: "600 15px/1.4 var(--font-sans)" }}>
+                      {t.signature && <span>&mdash; {t.signature}</span>}
+                      <a
+                        href={t.url}
+                        target="_blank"
+                        rel="noopener"
+                        className="hc-t"
+                        style={{
+                          display: "block",
+                          marginTop: 8,
+                          font: "500 13px/1 var(--font-sans)",
+                          color: "var(--on-panel)",
+                          opacity: 0.7,
+                          textUnderlineOffset: 4,
+                        }}
+                      >
+                        Read on hallelujahchallengelive.com
+                      </a>
                     </figcaption>
                   </figure>
                 </Card>
               </Reveal>
             ))}
           </div>
+
+          {shown < matches.length && (
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 28 }}>
+              <button
+                type="button"
+                onClick={() => setShown((n) => n + PAGE)}
+                className="hc-t hc-pill-outline"
+                style={{
+                  minHeight: 54,
+                  padding: "0 30px",
+                  borderRadius: "var(--r-pill)",
+                  border: "1px solid var(--hairline-strong)",
+                  background: "transparent",
+                  color: "var(--fg)",
+                  font: "600 16px/1 var(--font-sans)",
+                  cursor: "pointer",
+                }}
+              >
+                Show more testimonies
+              </button>
+            </div>
+          )}
 
           {list.length === 0 && (
             <p
@@ -266,12 +276,13 @@ export default function TestimoniesPage() {
                 color: "var(--fg-muted)",
               }}
             >
-              No testimonies here yet. Yours could be the first.
+              Nothing matches that search. Try a single word — healing, visa, job.
             </p>
           )}
 
           <p style={{ margin: "24px 0 0", font: "400 14px/1.5 var(--font-sans)", color: "var(--fg-muted)" }}>
-            Testimonies are personal accounts of faith, shared with permission.
+            Testimonies are personal accounts of faith, published by the ministry on its own blog and quoted
+            here in full.
           </p>
         </Section>
 
