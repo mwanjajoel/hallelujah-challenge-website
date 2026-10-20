@@ -1,5 +1,75 @@
-/* Base document styles, merged from the per-page <helmet><style> blocks in the
-   design. Everything else is carried on inline styles, exactly as designed. */
+/* ===========================================================================
+   Hallelujah Challenge — design tokens, motion and base styles.
+
+   Colour keeps the midnight/gold identity; the structure of the token set
+   (bg / surface / muted / line / fg / accent / glow) is what makes depth
+   systematic rather than ad hoc.
+   =========================================================================== */
+
+:root {
+  /* --- surfaces, back to front ------------------------------------------ */
+  --bg: #0b0d17;
+  --surface: #141829;
+  --muted: #1b2033;
+  --line: #262b40;
+
+  /* --- ink --------------------------------------------------------------- */
+  --fg: #f6f1e7;
+  --fg-dim: #c9ccd9;
+  --fg-muted: #a9aec2;
+
+  /* --- accent ------------------------------------------------------------ */
+  --accent: #d4a64a;
+  --accent-bright: #e6c178;
+  --accent-deep: #b8892f;
+  --accent-soft: #2a2110;
+  --ember: #f2c48a;
+  --live: #c62f2f;
+
+  /* --- light sections ---------------------------------------------------- */
+  --cream: #fbf8f2;
+  --ink: #141829;
+
+  /* --- glows: low alpha, layered as radial bleeds ------------------------ */
+  --glow-gold: rgba(212, 166, 74, 0.16);
+  --glow-blue: rgba(40, 62, 170, 0.28);
+  --glow-ember: rgba(224, 138, 79, 0.2);
+
+  /* --- glass ------------------------------------------------------------- */
+  --glass: rgba(6, 8, 16, 0.45);
+  --hairline: rgba(246, 241, 231, 0.1);
+  --hairline-strong: rgba(246, 241, 231, 0.22);
+
+  /* --- motion ------------------------------------------------------------ */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --d-hover: 0.55s;
+  --d-enter: 0.9s;
+  --d-enter-slow: 1.1s;
+  --d-transform: 1.4s;
+  --stagger: 0.11s;
+
+  /* --- layout ------------------------------------------------------------ */
+  --max-wide: 1600px;
+  --max: 1408px;
+  --col-wide: 1024px;
+  --col: 672px;
+  --col-narrow: 576px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --pad-y: clamp(96px, 12vw, 176px);
+  --pad-y-sm: clamp(64px, 8vw, 96px);
+
+  /* --- radii ------------------------------------------------------------- */
+  --r-xl: 48px;
+  --r-lg: 40px;
+  --r-md: 24px;
+  --r-sm: 14px;
+  --r-pill: 999px;
+
+  /* --- type -------------------------------------------------------------- */
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: Geist, system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+}
 
 html {
   scroll-behavior: smooth;
@@ -7,8 +77,20 @@ html {
 
 body {
   margin: 0;
-  background: #0b0d17;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Clearance for the fixed bar along the bottom. */
+  padding-bottom: clamp(72px, 9vw, 96px);
+}
+
+/* Hidden on narrow screens, where the bottom bar has no room for it. */
+@media (max-width: 560px) {
+  .hc-hide-sm {
+    display: none;
+  }
 }
 
 * {
@@ -16,21 +98,17 @@ body {
 }
 
 a {
-  color: #d4a64a;
-}
-
-a:hover {
-  color: #e6c178;
+  color: var(--accent);
 }
 
 :focus-visible {
-  outline: 2px solid #d4a64a;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: #d4a64a;
-  color: #0b0d17;
+  background: var(--accent);
+  color: var(--bg);
 }
 
 input::placeholder,
@@ -38,22 +116,158 @@ textarea::placeholder {
   color: #7d8299;
 }
 
-/* ---------------------------------------------------------------------------
-   Hover and focus treatments.
+/* ===========================================================================
+   Motion
+   =========================================================================== */
 
-   The design expresses these as style-hover="…" / style-focus="…" attributes,
-   which are a design-canvas feature. Inline styles cannot carry a pseudo-class,
-   so each distinct treatment becomes a class applied alongside the element's
-   untouched inline style.
-   --------------------------------------------------------------------------- */
+/* The signature entrance. Opacity and blur resolve first; the transform keeps
+   travelling for another half second, so the element reads before it lands. */
+.hc-reveal {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(24px) scale(0.97);
+  transition:
+    opacity var(--d-enter) var(--ease),
+    filter var(--d-enter) var(--ease),
+    transform var(--d-transform) var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--stagger));
+}
 
+.hc-reveal[data-in="true"] {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* Lighter variant: no travel, just focus. For dense groups such as cards. */
+.hc-sharpen {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(12px);
+  transition:
+    opacity var(--d-enter) var(--ease),
+    filter var(--d-enter) var(--ease),
+    transform var(--d-enter-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.hc-sharpen[data-in="true"] {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* Inline photo pills set into a running headline. They open from nothing as
+   the sentence reveals, so the images read as part of the typography. Each
+   pill carries its own --w. */
+.hc-reveal [data-pill] {
+  width: 0;
+  transition: width var(--d-transform) var(--ease);
+  transition-delay: calc(0.2s + var(--pi, 0) * 0.12s);
+}
+
+.hc-reveal[data-in="true"] [data-pill] {
+  width: var(--w);
+}
+
+@keyframes hc-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes hc-drift {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate(-18px, -14px) rotate(-6deg);
+  }
+}
+
+@keyframes hc-breathe {
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 120px rgba(212, 166, 74, 0.38);
+  }
+}
+
+@keyframes hc-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes hc-shimmer {
+  0%,
+  35% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes hc-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Ambient loops. Alternating direction keeps them from looking like a reset,
+   and negative delays desynchronise siblings without staggering their start. */
+.hc-float {
+  animation: hc-float 7s var(--ease) infinite alternate;
+}
+.hc-drift {
+  animation: hc-drift 14s ease-in-out infinite alternate;
+}
+.hc-breathe {
+  animation: hc-breathe 6s ease-in-out infinite;
+}
+.hc-twinkle {
+  animation: hc-twinkle 3.6s ease-in-out infinite;
+}
+
+/* ===========================================================================
+   Interaction
+
+   Every hover runs on the same easing and duration as the entrances. Without
+   this the page animates in beautifully and then snaps the moment it is used.
+   =========================================================================== */
+
+.hc-t {
+  transition:
+    color var(--d-hover) var(--ease),
+    background-color var(--d-hover) var(--ease),
+    border-color var(--d-hover) var(--ease),
+    box-shadow var(--d-hover) var(--ease),
+    opacity var(--d-hover) var(--ease),
+    filter var(--d-hover) var(--ease),
+    letter-spacing var(--d-hover) var(--ease),
+    transform var(--d-hover) var(--ease);
+}
+
+.hc-pill-gold {
+  transition: inherit;
+}
 .hc-pill-gold:hover {
-  background: #b8892f;
+  background: var(--accent-deep);
   box-shadow: 0 10px 40px -8px rgba(212, 166, 74, 0.55);
 }
 
 .hc-pill-cream:hover {
-  background: #f6f1e7;
+  background: var(--fg);
 }
 
 .hc-pill-red:hover {
@@ -61,75 +275,100 @@ textarea::placeholder {
 }
 
 .hc-pill-dark:hover {
-  background: #262b40;
+  background: var(--line);
 }
 
 .hc-pill-outline:hover {
-  border-color: #f6f1e7;
+  border-color: var(--fg);
 }
 
 .hc-pill-outline-gold:hover {
-  border-color: #d4a64a;
-}
-
-.hc-pill-tint:hover {
-  background: rgba(212, 166, 74, 0.12);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(212, 166, 74, 0.25);
 }
 
 .hc-circle:hover {
-  border-color: #d4a64a;
+  border-color: var(--accent);
 }
 
 .hc-circle-muted:hover {
-  border-color: #a9aec2;
+  border-color: var(--fg-muted);
 }
 
 .hc-navlink:hover {
-  background: #141829;
-  color: #f6f1e7;
+  background: var(--surface);
+  color: var(--fg);
 }
 
 .hc-footlink:hover {
-  color: #d4a64a;
+  color: var(--accent);
+  letter-spacing: 0.01em;
 }
 
 .hc-legallink:hover {
-  color: #f6f1e7;
+  color: var(--fg);
 }
 
-.hc-zoom:hover {
-  transform: scale(1.04);
+.hc-zoom,
+.hc-zoom-lg {
+  transition: transform var(--d-transform) var(--ease);
 }
-
-.hc-zoom-lg:hover {
-  transform: scale(1.06);
-}
-
-/* The zoom lives on an inner layer; hovering the card is what should trigger it. */
 .hc-zoom-host:hover .hc-zoom {
   transform: scale(1.04);
 }
-
 .hc-zoom-host:hover .hc-zoom-lg {
   transform: scale(1.06);
 }
 
 .hc-input:focus {
-  border-color: #d4a64a;
+  border-color: var(--accent);
   outline: none;
 }
 
 .hc-input-dark:focus {
-  border-color: #141829;
+  border-color: var(--ink);
   outline: none;
 }
+
+/* An arrow link whose mark slides on hover. */
+.hc-arrow span[data-mark] {
+  display: inline-block;
+  transition: transform var(--d-hover) var(--ease);
+}
+.hc-arrow:hover span[data-mark] {
+  transform: translateX(5px);
+}
+
+/* ===========================================================================
+   Reduced motion
+
+   Killing transitions is not enough: the reveal classes would then stay at
+   opacity 0 behind a 12px blur. Their end state has to be forced.
+   =========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  * {
+
+  *,
+  *::before,
+  *::after {
     transition: none !important;
     animation: none !important;
+  }
+
+  .hc-reveal,
+  .hc-sharpen {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  /* The pills open by animating width, so they need their end state forced
+     too — otherwise they would sit at zero and the photographs would simply
+     be missing from the sentence. */
+  .hc-reveal [data-pill] {
+    width: var(--w) !important;
   }
 }

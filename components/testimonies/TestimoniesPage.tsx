@@ -1,29 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import ArrowLink from "@/components/ui/ArrowLink";
+import Card from "@/components/ui/Card";
+import Display, { Accent } from "@/components/ui/Display";
+import Reveal from "@/components/ui/Reveal";
+import Section from "@/components/ui/Section";
 
 const RAW: Array<[quote: string, name: string, country: string, cat: string]> = [
   ["I reside in the USA, and God healed me.", "Grace", "USA", "Healing"],
   ["After seven years of waiting, our son was born during the June edition.", "Adaeze", "Nigeria", "Family"],
-  [
-    "My visa was refused twice. I praised every night of the challenge, and this month it was approved.",
-    "Kwame",
-    "Ghana",
-    "Visa",
-  ],
+  ["My visa was refused twice. I praised every night of the challenge, and this month it was approved.", "Kwame", "Ghana", "Visa"],
   ["I lost my job in March. On Day 9 I received an offer letter.", "Tunde", "United Kingdom", "Career"],
   ["We cleared a debt our family had carried for four years.", "Wanjiru", "Kenya", "Finances"],
   ["I came for the music. On the third night I gave my life to Jesus.", "Daniel", "Canada", "Salvation"],
   ["My mother and I had not spoken in two years. Now we join at 11:59 together.", "Ruth", "South Africa", "Family"],
   ["The doctors were cautious. We kept praising. My scan came back clear.", "Ifeoma", "Ireland", "Healing"],
-  [
-    "I was promoted after four years in the same role. I dressed like my miracle every night.",
-    "Chinedu",
-    "Nigeria",
-    "Career",
-  ],
+  ["I was promoted after four years in the same role. I dressed like my miracle every night.", "Chinedu", "Nigeria", "Career"],
   ["Our study visas came through in the same week.", "Esi", "Ghana", "Visa"],
   ["My husband, who never prayed, now sets the alarm for 11:59.", "Amaka", "USA", "Salvation"],
   ["A business I had given up on received its first big contract.", "Joseph", "Tanzania", "Finances"],
@@ -40,21 +35,27 @@ const TESTIMONIES = RAW.map(([quote, name, country, cat]) => ({
 const CATS = ["All", "Healing", "Family", "Career", "Visa", "Finances", "Salvation"];
 const COUNTRIES = ["All countries", ...[...new Set(TESTIMONIES.map((t) => t.country))].sort()];
 
-const FIELD: React.CSSProperties = {
+const FIELD: CSSProperties = {
   minHeight: 52,
   padding: "0 16px",
-  borderRadius: 12,
-  background: "#FFFFFF",
+  borderRadius: "var(--r-sm)",
+  background: "#fff",
   border: "1px solid #cfc7b5",
-  color: "#141829",
-  font: "400 17px/1 Geist,sans-serif",
+  color: "var(--ink)",
+  font: "400 17px/1 var(--font-sans)",
 };
 
-const FIELD_LABEL: React.CSSProperties = {
+const FIELD_LABEL: CSSProperties = {
   display: "flex",
   flexDirection: "column",
   gap: 8,
-  font: "500 15px/1.3 Geist,sans-serif",
+  font: "500 15px/1.3 var(--font-sans)",
+};
+
+const EYEBROW: CSSProperties = {
+  margin: 0,
+  font: "500 12px/1 var(--font-mono)",
+  letterSpacing: ".14em",
 };
 
 export default function TestimoniesPage() {
@@ -76,418 +77,327 @@ export default function TestimoniesPage() {
   const cols = width < 700 ? 1 : width < 1060 ? 2 : 3;
 
   return (
-    <div
-      style={{
-        containerType: "inline-size",
-        background: "#0B0D17",
-        color: "#F6F1E7",
-        fontFamily: "Geist,system-ui,sans-serif",
-        fontSize: "clamp(16px,1.5cqw,18px)",
-        lineHeight: 1.6,
-        minHeight: "100vh",
-      }}
-    >
-      <div style={{ position: "sticky", top: 0, zIndex: 50, display: "block" }}>
+    <>
+      <div style={{ position: "sticky", top: 0, zIndex: 50 }}>
         <SiteHeader active="testimonies" />
       </div>
 
       <main>
-        <section
-          style={{
-            position: "relative",
-            overflow: "clip",
-            background: "linear-gradient(180deg,#0B0D17 0%,#1a1630 40%,#3a2433 75%,#5e3530 100%)",
-          }}
+        {/* ------------------------------------------------------------ HERO */}
+        <Section
+          aria-label="Testimonies"
+          width="text"
+          style={{ background: "linear-gradient(180deg, var(--bg) 0%, #1a1630 42%, #3a2433 78%, #5e3530 100%)" }}
+          innerStyle={{ textAlign: "center" }}
         >
           <div
             aria-hidden="true"
+            className="hc-drift"
             style={{
               position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: "80%",
-              background: "radial-gradient(ellipse 55% 70% at 50% 100%,rgba(224,138,79,.4),transparent 70%)",
+              inset: "40% -10% -30%",
+              background: "radial-gradient(55% 70% at 50% 100%, rgba(224,138,79,.42), transparent 70%)",
+              pointerEvents: "none",
             }}
           />
-          <div
-            style={{
-              position: "relative",
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "clamp(72px,10cqw,128px) clamp(20px,5cqw,64px) clamp(56px,7cqw,88px)",
-            }}
-          >
-            <p
-              style={{
-                margin: "0 0 18px",
-                font: "500 12px/1 'Geist Mono',monospace",
-                letterSpacing: ".06em",
-                color: "#E9B48C",
-              }}
-            >
-              TESTIMONIES · THE MORNING AFTER
-            </p>
-            <h1
-              style={{
-                margin: 0,
-                maxWidth: "14ch",
-                font: "300 clamp(44px,7cqw,96px)/1.04 Geist,sans-serif",
-                letterSpacing: "-.015em",
-                textWrap: "balance",
-              }}
-            >
-              His mercy endures <em style={{ fontStyle: "normal", fontWeight: 200 }}>forever.</em>
-            </h1>
-            <p
-              style={{
-                margin: "18px 0 0",
-                font: "500 12px/1 'Geist Mono',monospace",
-                letterSpacing: ".06em",
-                color: "#D4A64A",
-              }}
-            >
-              PSALM 136:1
-            </p>
-            <div style={{ marginTop: 36, display: "flex", flexWrap: "wrap", gap: 12 }}>
-              <a
-                href="#share"
-                className="hc-pill-cream"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  minHeight: 52,
-                  padding: "0 26px",
-                  borderRadius: 999,
-                  background: "#FBF8F2",
-                  color: "#141829",
-                  font: "600 16px/1 Geist,sans-serif",
-                  textDecoration: "none",
-                }}
-              >
-                Share what God has done
-              </a>
-            </div>
-          </div>
-        </section>
+          <Reveal style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(20px, 2.6vw, 32px)" }}>
+            <p style={{ ...EYEBROW, color: "#E9B48C" }}>TESTIMONIES · THE MORNING AFTER</p>
+            <Display as="h1" size="hero" style={{ maxWidth: "13ch" }}>
+              His mercy endures <Accent>forever</Accent>
+            </Display>
+            <p style={{ ...EYEBROW, color: "var(--accent)" }}>PSALM 136:1</p>
+            <ArrowLink href="#share" variant="cream">
+              Share what God has done
+            </ArrowLink>
+          </Reveal>
+        </Section>
 
-        <section
+        {/* ------------------------------------------------------------ GRID */}
+        <Section
           aria-labelledby="grid-h"
-          style={{ background: "linear-gradient(180deg,#5e3530 0%,#2a1d2a 30%,#0B0D17 100%)" }}
+          tight
+          style={{ background: "linear-gradient(180deg, #5e3530 0%, #2a1d2a 32%, var(--bg) 100%)" }}
         >
-          <div
+          <h2 id="grid-h" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
+            All testimonies
+          </h2>
+
+          <Reveal
             style={{
-              maxWidth: 1280,
-              margin: "0 auto",
-              padding: "0 clamp(20px,5cqw,64px) clamp(80px,10cqw,128px)",
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              gap: 16,
+              marginBottom: 26,
             }}
           >
-            <h2
-              id="grid-h"
-              style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}
-            >
-              All testimonies
-            </h2>
-
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-                gap: 16,
-                padding: "28px 0",
-              }}
-            >
-              <div role="group" aria-label="Filter by category" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {CATS.map((c) => {
-                  const sel = cat === c;
-                  return (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setCat(c)}
-                      aria-pressed={sel}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        minHeight: 44,
-                        padding: "0 18px",
-                        borderRadius: 999,
-                        border: `1px solid ${sel ? "#FBF8F2" : "rgba(246,241,231,.4)"}`,
-                        background: sel ? "#FBF8F2" : "rgba(11,13,23,.3)",
-                        color: sel ? "#141829" : "#F6F1E7",
-                        font: "500 15px/1 Geist,sans-serif",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {sel && <span aria-hidden="true">✓</span>}
-                      {c}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <label
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                  font: "500 13px/1 Geist,sans-serif",
-                  color: "#F3D9C5",
-                }}
-              >
-                Country
-                <select
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  style={{
-                    minHeight: 48,
-                    minWidth: 200,
-                    padding: "0 14px",
-                    borderRadius: 12,
-                    background: "rgba(11,13,23,.5)",
-                    border: "1px solid rgba(246,241,231,.4)",
-                    color: "#F6F1E7",
-                    font: "500 16px/1 Geist,sans-serif",
-                  }}
-                >
-                  {COUNTRIES.map((o) => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <p aria-live="polite" style={{ margin: "0 0 20px", font: "400 15px/1 Geist,sans-serif", color: "#F3D9C5" }}>
-              Showing {list.length} {list.length === 1 ? "testimony" : "testimonies"}
-            </p>
-
-            <div style={{ columns: cols, columnGap: 16 }}>
-              {list.map((t) => (
-                <figure
-                  key={`${t.name}-${t.country}-${t.cat}`}
-                  style={{
-                    breakInside: "avoid",
-                    margin: "0 0 16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 20,
-                    padding: 28,
-                    borderRadius: 18,
-                    background: "#FBF8F2",
-                    color: "#141829",
-                  }}
-                >
-                  <span
+            <div role="group" aria-label="Filter by category" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {CATS.map((c) => {
+                const sel = cat === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setCat(c)}
+                    aria-pressed={sel}
+                    className="hc-t hc-pill-outline"
                     style={{
-                      alignSelf: "flex-start",
-                      padding: "5px 10px",
-                      borderRadius: 999,
-                      background: "#E08A4F",
-                      color: "#141829",
-                      font: "500 11px/1 'Geist Mono',monospace",
-                      letterSpacing: ".06em",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      minHeight: 44,
+                      padding: "0 18px",
+                      borderRadius: "var(--r-pill)",
+                      border: "1px solid " + (sel ? "var(--cream)" : "var(--hairline-strong)"),
+                      background: sel ? "var(--cream)" : "rgba(11,13,23,.3)",
+                      color: sel ? "var(--ink)" : "var(--fg)",
+                      font: "500 15px/1 var(--font-sans)",
+                      cursor: "pointer",
                     }}
                   >
-                    {t.catUpper}
-                  </span>
-                  <blockquote style={{ margin: 0, font: "400 22px/1.4 Geist,sans-serif", textWrap: "pretty" }}>
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-                  <figcaption
-                    style={{ display: "flex", alignItems: "center", gap: 12, font: "600 15px/1.3 Geist,sans-serif" }}
-                  >
-                    <span aria-hidden="true" style={{ width: 24, height: 1, background: "#B8892F" }} />
-                    {t.name}, {t.country}
-                  </figcaption>
-                </figure>
-              ))}
+                    {sel && <span aria-hidden="true">&#10003;</span>}
+                    {c}
+                  </button>
+                );
+              })}
             </div>
 
-            {list.length === 0 && (
-              <p
+            <label
+              style={{ display: "flex", flexDirection: "column", gap: 6, font: "500 13px/1 var(--font-sans)", color: "#F3D9C5" }}
+            >
+              Country
+              <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="hc-t hc-input"
                 style={{
-                  margin: 0,
-                  padding: 40,
-                  border: "1px dashed rgba(246,241,231,.3)",
-                  borderRadius: 18,
-                  textAlign: "center",
-                  color: "#F3D9C5",
+                  minHeight: 48,
+                  minWidth: 200,
+                  padding: "0 14px",
+                  borderRadius: "var(--r-sm)",
+                  background: "rgba(11,13,23,.5)",
+                  border: "1px solid var(--hairline-strong)",
+                  color: "var(--fg)",
+                  font: "500 16px/1 var(--font-sans)",
                 }}
               >
-                No testimonies here yet. Yours could be the first.
-              </p>
-            )}
+                {COUNTRIES.map((o) => (
+                  <option key={o} value={o}>
+                    {o}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </Reveal>
 
-            <p style={{ margin: "24px 0 0", font: "400 14px/1.5 Geist,sans-serif", color: "#A9AEC2" }}>
-              Testimonies are personal accounts of faith, shared with permission.
-            </p>
+          <p aria-live="polite" style={{ margin: "0 0 20px", font: "400 15px/1 var(--font-sans)", color: "#F3D9C5" }}>
+            Showing {list.length} {list.length === 1 ? "testimony" : "testimonies"}
+          </p>
+
+          <div style={{ columns: cols, columnGap: 16 }}>
+            {list.map((t, i) => (
+              <Reveal
+                key={t.name + t.country + t.cat}
+                variant="sharpen"
+                index={i % 6}
+                style={{ breakInside: "avoid", marginBottom: 16 }}
+              >
+                <Card variant="cream" radius="md" style={{ padding: 28 }}>
+                  <figure style={{ margin: 0, display: "flex", flexDirection: "column", gap: 20 }}>
+                    <span
+                      style={{
+                        alignSelf: "flex-start",
+                        padding: "5px 10px",
+                        borderRadius: "var(--r-pill)",
+                        background: "#E08A4F",
+                        color: "var(--ink)",
+                        font: "500 11px/1 var(--font-mono)",
+                        letterSpacing: ".06em",
+                      }}
+                    >
+                      {t.catUpper}
+                    </span>
+                    <blockquote
+                      style={{
+                        margin: 0,
+                        fontFamily: "var(--font-display)",
+                        fontSize: 25,
+                        lineHeight: 1.3,
+                        textWrap: "pretty",
+                      }}
+                    >
+                      &ldquo;{t.quote}&rdquo;
+                    </blockquote>
+                    <figcaption
+                      style={{ display: "flex", alignItems: "center", gap: 12, font: "600 15px/1.3 var(--font-sans)" }}
+                    >
+                      <span aria-hidden="true" style={{ width: 24, height: 1, background: "#B8892F" }} />
+                      {t.name}, {t.country}
+                    </figcaption>
+                  </figure>
+                </Card>
+              </Reveal>
+            ))}
           </div>
-        </section>
 
-        <section
-          id="share"
-          aria-labelledby="share-h"
-          style={{ background: "#FBF8F2", color: "#141829", scrollMarginTop: 80 }}
-        >
+          {list.length === 0 && (
+            <p
+              style={{
+                margin: 0,
+                padding: 40,
+                border: "1px dashed var(--hairline-strong)",
+                borderRadius: "var(--r-md)",
+                textAlign: "center",
+                color: "#F3D9C5",
+              }}
+            >
+              No testimonies here yet. Yours could be the first.
+            </p>
+          )}
+
+          <p style={{ margin: "24px 0 0", font: "400 14px/1.5 var(--font-sans)", color: "var(--fg-muted)" }}>
+            Testimonies are personal accounts of faith, shared with permission.
+          </p>
+        </Section>
+
+        {/* ----------------------------------------------------------- SHARE */}
+        <Section id="share" aria-labelledby="share-h" tone="cream" width="text" style={{ scrollMarginTop: 80 }}>
           <div
             style={{
-              maxWidth: 1100,
-              margin: "0 auto",
-              padding: "clamp(80px,10cqw,128px) clamp(20px,5cqw,64px)",
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,360px),1fr))",
-              gap: "clamp(40px,6cqw,80px)",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
+              gap: "clamp(36px, 6vw, 76px)",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <p
-                style={{
-                  margin: 0,
-                  font: "500 12px/1 'Geist Mono',monospace",
-                  letterSpacing: ".06em",
-                  color: "#5a5f73",
-                }}
-              >
-                SHARE YOUR TESTIMONY
-              </p>
-              <h2
-                id="share-h"
-                style={{ margin: 0, font: "300 clamp(36px,4.6cqw,56px)/1.08 Geist,sans-serif", letterSpacing: "-.01em" }}
-              >
-                What has God done?
-              </h2>
-              <p style={{ margin: 0, font: "400 18px/1.65 Geist,sans-serif", color: "#262B40", textWrap: "pretty" }}>
+            <Reveal style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <p style={{ ...EYEBROW, color: "#5a5f73" }}>SHARE YOUR TESTIMONY</p>
+              <Display id="share-h" size="lg">
+                What has <Accent>God done?</Accent>
+              </Display>
+              <p style={{ margin: 0, font: "400 18px/1.65 var(--font-sans)", color: "#3a3f52", textWrap: "pretty" }}>
                 Tell it in your own words. We may share your story to encourage others; we will only use your first
                 name and country.
               </p>
-            </div>
+            </Reveal>
 
-            {!sent && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-                style={{ display: "flex", flexDirection: "column", gap: 20 }}
-              >
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,200px),1fr))",
-                    gap: 16,
+            <Reveal index={1}>
+              {!sent ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setSent(true);
                   }}
+                  style={{ display: "flex", flexDirection: "column", gap: 20 }}
                 >
-                  <label style={FIELD_LABEL}>
-                    First name
-                    <input type="text" required autoComplete="given-name" className="hc-input-dark" style={FIELD} />
-                  </label>
-                  <label style={FIELD_LABEL}>
-                    Country
-                    <input type="text" required autoComplete="country-name" className="hc-input-dark" style={FIELD} />
-                  </label>
-                </div>
-
-                <label style={FIELD_LABEL}>
-                  Category
-                  <select className="hc-input-dark" style={{ ...FIELD, padding: "0 14px" }} defaultValue="Healing">
-                    <option>Healing</option>
-                    <option>Family</option>
-                    <option>Career</option>
-                    <option>Visa</option>
-                    <option>Finances</option>
-                    <option>Salvation</option>
-                    <option>Other</option>
-                  </select>
-                </label>
-
-                <label style={FIELD_LABEL}>
-                  Your testimony
-                  <textarea
-                    required
-                    rows={6}
-                    placeholder="Tell it in your own words."
-                    className="hc-input-dark"
+                  <div
                     style={{
-                      padding: "14px 16px",
-                      borderRadius: 12,
-                      background: "#FFFFFF",
-                      border: "1px solid #cfc7b5",
-                      color: "#141829",
-                      font: "400 17px/1.6 Geist,sans-serif",
-                      resize: "vertical",
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 190px), 1fr))",
+                      gap: 16,
                     }}
-                  />
-                </label>
+                  >
+                    <label style={FIELD_LABEL}>
+                      First name
+                      <input type="text" required autoComplete="given-name" className="hc-t hc-input-dark" style={FIELD} />
+                    </label>
+                    <label style={FIELD_LABEL}>
+                      Country
+                      <input type="text" required autoComplete="country-name" className="hc-t hc-input-dark" style={FIELD} />
+                    </label>
+                  </div>
 
-                <label
+                  <label style={FIELD_LABEL}>
+                    Category
+                    <select className="hc-t hc-input-dark" style={{ ...FIELD, padding: "0 14px" }} defaultValue="Healing">
+                      {["Healing", "Family", "Career", "Visa", "Finances", "Salvation", "Other"].map((o) => (
+                        <option key={o}>{o}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label style={FIELD_LABEL}>
+                    Your testimony
+                    <textarea
+                      required
+                      rows={6}
+                      placeholder="Tell it in your own words."
+                      className="hc-t hc-input-dark"
+                      style={{
+                        padding: "14px 16px",
+                        borderRadius: "var(--r-sm)",
+                        background: "#fff",
+                        border: "1px solid #cfc7b5",
+                        color: "var(--ink)",
+                        font: "400 17px/1.6 var(--font-sans)",
+                        resize: "vertical",
+                      }}
+                    />
+                  </label>
+
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 12,
+                      font: "400 16px/1.5 var(--font-sans)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      required
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      style={{ width: 22, height: 22, marginTop: 2, accentColor: "var(--ink)", flex: "none" }}
+                    />
+                    I agree that the Hallelujah Challenge may share my testimony with my first name and country.
+                  </label>
+
+                  <button
+                    type="submit"
+                    className="hc-t hc-pill-dark"
+                    style={{
+                      alignSelf: "flex-start",
+                      minHeight: 52,
+                      padding: "0 30px",
+                      borderRadius: "var(--r-pill)",
+                      border: 0,
+                      background: "var(--ink)",
+                      color: "var(--cream)",
+                      font: "600 16px/1 var(--font-sans)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Send my testimony
+                  </button>
+                </form>
+              ) : (
+                <div
+                  role="status"
                   style={{
                     display: "flex",
-                    alignItems: "flex-start",
-                    gap: 12,
-                    font: "400 16px/1.5 Geist,sans-serif",
-                    cursor: "pointer",
+                    flexDirection: "column",
+                    gap: 16,
+                    padding: 32,
+                    borderRadius: "var(--r-md)",
+                    background: "#fff",
+                    border: "1px solid #e5dfd2",
                   }}
                 >
-                  <input
-                    type="checkbox"
-                    required
-                    checked={consent}
-                    onChange={(e) => setConsent(e.target.checked)}
-                    style={{ width: 22, height: 22, marginTop: 2, accentColor: "#141829", flex: "none" }}
-                  />
-                  I agree that the Hallelujah Challenge may share my testimony with my first name and country.
-                </label>
-
-                <button
-                  type="submit"
-                  className="hc-pill-dark"
-                  style={{
-                    alignSelf: "flex-start",
-                    minHeight: 52,
-                    padding: "0 30px",
-                    borderRadius: 999,
-                    border: 0,
-                    background: "#141829",
-                    color: "#FBF8F2",
-                    font: "600 16px/1 Geist,sans-serif",
-                    cursor: "pointer",
-                  }}
-                >
-                  Send my testimony
-                </button>
-              </form>
-            )}
-
-            {sent && (
-              <div
-                role="status"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 16,
-                  padding: 32,
-                  borderRadius: 18,
-                  background: "#FFFFFF",
-                  border: "1px solid #e5dfd2",
-                }}
-              >
-                <span aria-hidden="true" style={{ width: 48, height: 1, background: "#B8892F" }} />
-                <p style={{ margin: 0, font: "300 28px/1.3 Geist,sans-serif" }}>Thank you for testifying.</p>
-                <p style={{ margin: 0, font: "400 17px/1.6 Geist,sans-serif", color: "#262B40" }}>
-                  Our team reads every testimony. Keep praising.
-                </p>
-              </div>
-            )}
+                  <span aria-hidden="true" style={{ width: 48, height: 1, background: "#B8892F" }} />
+                  <Display size="sm">Thank you for testifying.</Display>
+                  <p style={{ margin: 0, font: "400 17px/1.6 var(--font-sans)", color: "#3a3f52" }}>
+                    Our team reads every testimony. Keep praising.
+                  </p>
+                </div>
+              )}
+            </Reveal>
           </div>
-        </section>
+        </Section>
       </main>
 
       <SiteFooter />
-    </div>
+    </>
   );
 }
