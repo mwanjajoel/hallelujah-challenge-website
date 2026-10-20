@@ -10,15 +10,25 @@ const VIDEO = "https://video.wixstatic.com/video/e178bc_74952a632df64354bc7e4c52
 
 const W = "https://static.wixstatic.com/media/";
 const FILL = "/v1/fill/w_2048,h_1152,al_c,q_85,enc_auto/";
+/* The auditorium frame is a native 1920x1080 on the live site, so it is
+   served at its own size rather than upscaled into the common fill. */
+const FILL_HD = "/v1/fill/w_1920,h_1080,al_c,q_85,enc_auto/";
 
 /**
  * The backdrop cycle. The opening frame is the footage; the rest are stills
  * from the gatherings. Each carries a description because the slide controls
  * name them — the images themselves are decorative behind the headline.
+ *
+ * Frames with words in them are not used here. A stage screen reading
+ * "CONGRATULATIONS" sat in this cycle and competed with the headline set over
+ * it, which is a fight the backdrop should never pick.
  */
 const SLIDES: Array<{ label: string; image: string; video?: boolean }> = [
   { label: "Tonight's session", image: POSTER, video: true },
-  { label: "The gathering", image: W + "e178bc_9c4ea1afa58c4409a0e40740a4bc966b~mv2.jpg" + FILL + "DSC09945.jpg" },
+  {
+    label: "A full auditorium",
+    image: W + "e178bc_055d0eb7cb824141a2061fbdf61afdbff000.jpg" + FILL_HD + "hc-auditorium.jpg",
+  },
   { label: "Hands raised in praise", image: W + "e178bc_afe198aca8994dec8029d557b7c47a6c~mv2.jpg" + FILL + "DSC03171.jpg" },
   { label: "The Festival", image: W + "e178bc_c8afc65f02014fd985ef729ac3fd673df000.jpg" + FILL + "hc-creating.jpg" },
   { label: "Worship through the night", image: W + "e178bc_5d0c5c6531da4fdeb0a5ac1ac3fd6ce5~mv2.jpg" + FILL + "DSC03192.jpg" },
