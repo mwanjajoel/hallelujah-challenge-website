@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, type CSSProperties } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 import { session } from "@/lib/session";
 import { useElementWidth } from "@/lib/useElementWidth";
 import { useNow, useSessionMode } from "@/lib/useSessionClock";
@@ -105,7 +106,7 @@ export default function SiteHeader({ active = "home" }: { active?: NavKey }) {
 
       <header
         style={{
-          background: "rgba(11,13,23,.72)",
+          background: "var(--header)",
           backdropFilter: "blur(18px)",
           WebkitBackdropFilter: "blur(18px)",
           borderBottom: "1px solid var(--line)",
@@ -186,6 +187,8 @@ export default function SiteHeader({ active = "home" }: { active?: NavKey }) {
 
           <div style={{ flex: 1 }} />
 
+          <ThemeToggle />
+
           <Link
             href="/give"
             className="hc-t hc-pill-gold"
@@ -198,8 +201,8 @@ export default function SiteHeader({ active = "home" }: { active?: NavKey }) {
               minHeight: 42,
               padding: "0 22px",
               borderRadius: "var(--r-pill)",
-              background: "var(--accent)",
-              color: "var(--bg)",
+              background: "var(--accent-fill)",
+              color: "var(--on-accent)",
               font: "600 15px/1 var(--font-sans)",
               textDecoration: "none",
             }}

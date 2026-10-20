@@ -13,8 +13,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Applies the saved theme before first paint. Without this the page
+            renders light and then flips, which is worse than no toggle at all.
+            Light is the default, so only an explicit "dark" sets anything. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{if(localStorage.getItem('hc-theme')==='dark'){document.documentElement.dataset.theme='dark'}}catch(e){}})()",
+          }}
+        />
         {/* Loaded as a stylesheet link rather than through next/font: the styles
             name "Geist" and "Geist Mono" literally in many inline `font:`
             shorthands, and next/font would rename the families.

@@ -20,6 +20,10 @@ interface Props {
   /** A radial colour bleed behind the content. */
   glow?: "gold" | "blue" | "ember" | null;
   glowAt?: string;
+  /** Full-bleed decorative layer behind the content — a canvas, a gradient.
+      Rendered as a child of the section rather than of the content column, so
+      it spans the whole band instead of being clipped to the text width. */
+  backdrop?: ReactNode;
   className?: string;
   style?: CSSProperties;
   innerStyle?: CSSProperties;
@@ -42,6 +46,7 @@ export default function Section({
   tight = false,
   glow = null,
   glowAt = "50% 0%",
+  backdrop,
   className,
   style,
   innerStyle,
@@ -56,12 +61,17 @@ export default function Section({
       style={{
         position: "relative",
         overflow: "clip",
-        background: tone === "cream" ? "var(--cream)" : "transparent",
-        color: tone === "cream" ? "var(--ink)" : "var(--fg)",
+        background: tone === "cream" ? "var(--panel)" : "transparent",
+        color: tone === "cream" ? "var(--on-panel)" : "var(--fg)",
         ...style,
       }}
       {...rest}
     >
+      {backdrop && (
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+          {backdrop}
+        </div>
+      )}
       {glow && (
         <div
           aria-hidden="true"

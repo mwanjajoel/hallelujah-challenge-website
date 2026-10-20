@@ -43,9 +43,9 @@ export default function ArrowLink({
 }: Props) {
   const skin: CSSProperties =
     variant === "gold"
-      ? { ...PILL, background: "var(--accent)", color: "var(--bg)" }
+      ? { ...PILL, background: "var(--accent-fill)", color: "var(--on-accent)" }
       : variant === "cream"
-        ? { ...PILL, background: "var(--cream)", color: "var(--ink)" }
+        ? { ...PILL, background: "var(--panel)", color: "var(--on-panel)" }
         : variant === "outline"
           ? { ...PILL, border: "1px solid var(--hairline-strong)", color: "var(--fg)" }
           : {

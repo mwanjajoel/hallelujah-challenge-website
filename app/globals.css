@@ -8,37 +8,54 @@
 
 :root {
   /* --- surfaces, back to front ------------------------------------------ */
-  --bg: #0b0d17;
-  --surface: #141829;
-  --muted: #1b2033;
-  --line: #262b40;
+  --bg: #ffffff;
+  --surface: #f8f5ef;
+  --muted: #f1ede3;
+  --line: #e4ded1;
 
   /* --- ink --------------------------------------------------------------- */
-  --fg: #f6f1e7;
-  --fg-dim: #c9ccd9;
-  --fg-muted: #a9aec2;
+  --fg: #14172a;
+  --fg-dim: #3c4055;
+  --fg-muted: #6a6f85;
 
-  /* --- accent ------------------------------------------------------------ */
-  --accent: #d4a64a;
-  --accent-bright: #e6c178;
+  /* --- accent -----------------------------------------------------------
+     Two accents, because one cannot do both jobs. --accent is used as text
+     and strokes, so on white it has to be dark enough to read. --accent-fill
+     is the gold people recognise, only ever used as a fill with --on-accent
+     sitting on top of it. */
+  --accent: #926615;
+  --accent-fill: #d4a64a;
+  --on-accent: #14172a;
+  --accent-bright: #b8892f;
   --accent-deep: #b8892f;
-  --accent-soft: #2a2110;
-  --ember: #f2c48a;
-  --live: #c62f2f;
+  --accent-soft: #f7edd9;
+  --ember: #a85f23;
+  --live: #c0272d;
 
-  /* --- light sections ---------------------------------------------------- */
+  /* --- the panel that contrasts with the page ---------------------------
+     Flips with the theme, so the alternating rhythm of the design survives
+     in both: dark panels on a white page, cream panels on a dark one. */
+  --panel: #14172a;
+  --on-panel: #f6f1e7;
+  --panel-muted: #9ba0b5;
+  --panel-line: #2b3048;
+
+  /* --- fixed literals, for the sections that stay dark in both themes --- */
   --cream: #fbf8f2;
-  --ink: #141829;
+  --ink: #14172a;
 
-  /* --- glows: low alpha, layered as radial bleeds ------------------------ */
-  --glow-gold: rgba(212, 166, 74, 0.16);
-  --glow-blue: rgba(40, 62, 170, 0.28);
-  --glow-ember: rgba(224, 138, 79, 0.2);
+  /* --- glows: kept faint on white, or they turn to haze ----------------- */
+  --glow-gold: rgba(212, 166, 74, 0.2);
+  --glow-blue: rgba(40, 62, 170, 0.1);
+  --glow-ember: rgba(224, 138, 79, 0.14);
 
   /* --- glass ------------------------------------------------------------- */
-  --glass: rgba(6, 8, 16, 0.45);
-  --hairline: rgba(246, 241, 231, 0.1);
-  --hairline-strong: rgba(246, 241, 231, 0.22);
+  --glass: rgba(255, 255, 255, 0.72);
+  --header: rgba(255, 255, 255, 0.82);
+  --hairline: rgba(20, 23, 42, 0.12);
+  --hairline-strong: rgba(20, 23, 42, 0.26);
+
+  color-scheme: light;
 
   /* --- motion ------------------------------------------------------------ */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -71,6 +88,58 @@
   --font-mono: "Geist Mono", ui-monospace, monospace;
 }
 
+:root[data-theme="dark"] {
+  --bg: #0b0d17;
+  --surface: #141829;
+  --muted: #1b2033;
+  --line: #262b40;
+
+  --fg: #f6f1e7;
+  --fg-dim: #c9ccd9;
+  --fg-muted: #a9aec2;
+
+  --accent: #d4a64a;
+  --accent-fill: #d4a64a;
+  --on-accent: #0b0d17;
+  --accent-bright: #e6c178;
+  --accent-deep: #b8892f;
+  --accent-soft: #2a2110;
+  --ember: #f2c48a;
+  --live: #c62f2f;
+
+  --panel: #fbf8f2;
+  --on-panel: #14172a;
+  --panel-muted: #5a5f73;
+  --panel-line: #e5dfd2;
+
+  --glow-gold: rgba(212, 166, 74, 0.16);
+  --glow-blue: rgba(40, 62, 170, 0.28);
+  --glow-ember: rgba(224, 138, 79, 0.2);
+
+  --glass: rgba(6, 8, 16, 0.45);
+  --header: rgba(11, 13, 23, 0.72);
+  --hairline: rgba(246, 241, 231, 0.1);
+  --hairline-strong: rgba(246, 241, 231, 0.22);
+
+  color-scheme: dark;
+}
+
+/* Sections that lead with photography or the WebGL sky stay dark in both
+   themes: text has to sit on imagery, and a scrim is the only way to keep it
+   legible. They fade into --bg at their edges so the seam disappears. */
+.hc-on-dark {
+  --fg: #f6f1e7;
+  --fg-dim: #c9ccd9;
+  --fg-muted: #a9aec2;
+  --accent: #d4a64a;
+  --line: #262b40;
+  --hairline: rgba(246, 241, 231, 0.14);
+  --hairline-strong: rgba(246, 241, 231, 0.3);
+  --glass: rgba(6, 8, 16, 0.45);
+  --surface: #141829;
+  color: var(--fg);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -78,6 +147,7 @@ html {
 body {
   margin: 0;
   background: var(--bg);
+  transition: background-color var(--d-hover) var(--ease), color var(--d-hover) var(--ease);
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

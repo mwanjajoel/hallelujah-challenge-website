@@ -43,7 +43,7 @@ export default function Card({
     variant === "glass"
       ? { background: "var(--glass)", border: "1px solid var(--hairline)", backdropFilter: "blur(14px)" }
       : variant === "cream"
-        ? { background: "var(--cream)", color: "var(--ink)", border: "1px solid rgba(20,24,41,.08)" }
+        ? { background: "var(--panel)", color: "var(--on-panel)", border: "1px solid var(--hairline)" }
         : { background: "var(--surface)", border: "1px solid var(--line)" };
 
   return (

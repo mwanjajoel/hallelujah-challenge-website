@@ -301,8 +301,8 @@ export default function GivePage() {
                       minHeight: 56,
                       borderRadius: "var(--r-pill)",
                       border: 0,
-                      background: "var(--accent)",
-                      color: "var(--bg)",
+                      background: "var(--accent-fill)",
+                      color: "var(--on-accent)",
                       font: "600 17px/1 var(--font-sans)",
                       cursor: "pointer",
                     }}
@@ -460,19 +460,19 @@ export default function GivePage() {
         {/* ---------------------------------------------------------- LETTER */}
         <Section aria-labelledby="letter-h" tone="cream" width="narrow">
           <Reveal as="article">
-            <p style={{ ...EYEBROW, color: "#5a5f73", marginBottom: 18 }}>ACCOUNTABILITY LETTER</p>
+            <p style={{ ...EYEBROW, color: "var(--panel-muted)", marginBottom: 18 }}>ACCOUNTABILITY LETTER</p>
             <Display id="letter-h" size="lg" style={{ marginBottom: 32 }}>
               To every <Accent>partner</Accent>
             </Display>
-            <div style={{ display: "flex", flexDirection: "column", gap: 20, font: "400 18px/1.75 var(--font-sans)", color: "#2b3045" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20, font: "400 18px/1.75 var(--font-sans)", color: "var(--panel-muted)" }}>
               <p
                 style={{
                   margin: 0,
                   padding: "12px 16px",
-                  border: "1px dashed #a39a86",
+                  border: "1px dashed var(--hairline-strong)",
                   borderRadius: 8,
                   font: "400 14px/1.5 var(--font-mono)",
-                  color: "#5a5f73",
+                  color: "var(--panel-muted)",
                 }}
               >
                 [ Draft placeholder. Final letter to be supplied and signed by the ministry. ]
@@ -489,15 +489,15 @@ export default function GivePage() {
               </p>
               <p style={{ margin: 0 }}>
                 If you have a question about a gift, please write to{" "}
-                <a href="mailto:info@hallelujahchallengelive.com" className="hc-t" style={{ color: "var(--ink)", textUnderlineOffset: 4 }}>
+                <a href="mailto:info@hallelujahchallengelive.com" className="hc-t" style={{ color: "var(--on-panel)", textUnderlineOffset: 4 }}>
                   info@hallelujahchallengelive.com
                 </a>
                 .
               </p>
-              <p style={{ margin: "12px 0 0", fontFamily: "var(--font-display)", fontSize: 24, color: "var(--ink)" }}>
+              <p style={{ margin: "12px 0 0", fontFamily: "var(--font-display)", fontSize: 24, color: "var(--on-panel)" }}>
                 [Signature]
               </p>
-              <p style={{ margin: 0, font: "500 15px/1.4 var(--font-sans)", color: "var(--ink)" }}>
+              <p style={{ margin: 0, font: "500 15px/1.4 var(--font-sans)", color: "var(--on-panel)" }}>
                 For the Hallelujah Challenge team
               </p>
             </div>

@@ -223,8 +223,8 @@ export default function WatchPage() {
                           height: 86,
                           borderRadius: "50%",
                           border: 0,
-                          background: "var(--accent)",
-                          color: "var(--bg)",
+                          background: "var(--accent-fill)",
+                          color: "var(--on-accent)",
                           font: "400 26px/1 var(--font-sans)",
                           cursor: "pointer",
                         }}

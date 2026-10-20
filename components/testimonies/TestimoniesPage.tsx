@@ -87,7 +87,8 @@ export default function TestimoniesPage() {
         <Section
           aria-label="Testimonies"
           width="text"
-          style={{ background: "linear-gradient(180deg, var(--bg) 0%, #1a1630 42%, #3a2433 78%, #5e3530 100%)" }}
+          className="hc-on-dark"
+          style={{ background: "linear-gradient(180deg, #14172a 0%, #1a1630 40%, #3a2433 76%, #5e3530 100%)" }}
           innerStyle={{ textAlign: "center" }}
         >
           <div
@@ -116,7 +117,21 @@ export default function TestimoniesPage() {
         <Section
           aria-labelledby="grid-h"
           tight
-          style={{ background: "linear-gradient(180deg, #5e3530 0%, #2a1d2a 32%, var(--bg) 100%)" }}
+          style={{ background: "var(--bg)" }}
+          // Full-bleed and behind the content. As a child it would be a
+          // positioned element among static siblings, so it painted over the
+          // filters and the first row of cards.
+          backdrop={
+            <div
+              style={{
+                position: "absolute",
+                inset: "0 0 auto 0",
+                height: "clamp(120px, 18vw, 240px)",
+                background: "linear-gradient(180deg, #5e3530 0%, #2a1d2a 46%, transparent 100%)",
+                opacity: 0.55,
+              }}
+            />
+          }
         >
           <h2 id="grid-h" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
             All testimonies
@@ -149,9 +164,9 @@ export default function TestimoniesPage() {
                       minHeight: 44,
                       padding: "0 18px",
                       borderRadius: "var(--r-pill)",
-                      border: "1px solid " + (sel ? "var(--cream)" : "var(--hairline-strong)"),
-                      background: sel ? "var(--cream)" : "rgba(11,13,23,.3)",
-                      color: sel ? "var(--ink)" : "var(--fg)",
+                      border: "1px solid " + (sel ? "var(--panel)" : "var(--hairline-strong)"),
+                      background: sel ? "var(--panel)" : "transparent",
+                      color: sel ? "var(--on-panel)" : "var(--fg)",
                       font: "500 15px/1 var(--font-sans)",
                       cursor: "pointer",
                     }}
@@ -164,7 +179,7 @@ export default function TestimoniesPage() {
             </div>
 
             <label
-              style={{ display: "flex", flexDirection: "column", gap: 6, font: "500 13px/1 var(--font-sans)", color: "#F3D9C5" }}
+              style={{ display: "flex", flexDirection: "column", gap: 6, font: "500 13px/1 var(--font-sans)", color: "var(--fg-muted)" }}
             >
               Country
               <select
@@ -176,7 +191,7 @@ export default function TestimoniesPage() {
                   minWidth: 200,
                   padding: "0 14px",
                   borderRadius: "var(--r-sm)",
-                  background: "rgba(11,13,23,.5)",
+                  background: "var(--surface)",
                   border: "1px solid var(--hairline-strong)",
                   color: "var(--fg)",
                   font: "500 16px/1 var(--font-sans)",
@@ -191,7 +206,7 @@ export default function TestimoniesPage() {
             </label>
           </Reveal>
 
-          <p aria-live="polite" style={{ margin: "0 0 20px", font: "400 15px/1 var(--font-sans)", color: "#F3D9C5" }}>
+          <p aria-live="polite" style={{ margin: "0 0 20px", font: "400 15px/1 var(--font-sans)", color: "var(--fg-muted)" }}>
             Showing {list.length} {list.length === 1 ? "testimony" : "testimonies"}
           </p>
 
@@ -249,7 +264,7 @@ export default function TestimoniesPage() {
                 border: "1px dashed var(--hairline-strong)",
                 borderRadius: "var(--r-md)",
                 textAlign: "center",
-                color: "#F3D9C5",
+                color: "var(--fg-muted)",
               }}
             >
               No testimonies here yet. Yours could be the first.
@@ -271,11 +286,11 @@ export default function TestimoniesPage() {
             }}
           >
             <Reveal style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-              <p style={{ ...EYEBROW, color: "#5a5f73" }}>SHARE YOUR TESTIMONY</p>
+              <p style={{ ...EYEBROW, color: "var(--panel-muted)" }}>SHARE YOUR TESTIMONY</p>
               <Display id="share-h" size="lg">
                 What has <Accent>God done?</Accent>
               </Display>
-              <p style={{ margin: 0, font: "400 18px/1.65 var(--font-sans)", color: "#3a3f52", textWrap: "pretty" }}>
+              <p style={{ margin: 0, font: "400 18px/1.65 var(--font-sans)", color: "var(--panel-muted)", textWrap: "pretty" }}>
                 Tell it in your own words. We may share your story to encourage others; we will only use your first
                 name and country.
               </p>
@@ -349,7 +364,7 @@ export default function TestimoniesPage() {
                       required
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
-                      style={{ width: 22, height: 22, marginTop: 2, accentColor: "var(--ink)", flex: "none" }}
+                      style={{ width: 22, height: 22, marginTop: 2, accentColor: "var(--on-panel)", flex: "none" }}
                     />
                     I agree that the Hallelujah Challenge may share my testimony with my first name and country.
                   </label>
@@ -363,8 +378,8 @@ export default function TestimoniesPage() {
                       padding: "0 30px",
                       borderRadius: "var(--r-pill)",
                       border: 0,
-                      background: "var(--ink)",
-                      color: "var(--cream)",
+                      background: "var(--on-panel)",
+                      color: "var(--panel)",
                       font: "600 16px/1 var(--font-sans)",
                       cursor: "pointer",
                     }}
@@ -387,7 +402,7 @@ export default function TestimoniesPage() {
                 >
                   <span aria-hidden="true" style={{ width: 48, height: 1, background: "#B8892F" }} />
                   <Display size="sm">Thank you for testifying.</Display>
-                  <p style={{ margin: 0, font: "400 17px/1.6 var(--font-sans)", color: "#3a3f52" }}>
+                  <p style={{ margin: 0, font: "400 17px/1.6 var(--font-sans)", color: "var(--panel-muted)" }}>
                     Our team reads every testimony. Keep praising.
                   </p>
                 </div>

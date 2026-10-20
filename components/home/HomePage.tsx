@@ -291,20 +291,28 @@ export default function HomePage() {
         </Section>
 
         {/* -------------------------------------------------------- TESTIMONY */}
-        <Section id="testimonies" aria-labelledby="test-h" width="narrow" style={{ background: "#100e1f" }}>
-          <canvas
-            ref={dawnCanvasRef}
-            aria-hidden="true"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
-          />
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "linear-gradient(180deg, var(--bg) 0%, rgba(11,13,23,0) 28%, rgba(11,13,23,.5) 100%)",
-            }}
-          />
+        <Section
+          id="testimonies"
+          aria-labelledby="test-h"
+          width="narrow"
+          className="hc-on-dark"
+          style={{ background: "#100e1f" }}
+          backdrop={
+            <>
+              <canvas
+                ref={dawnCanvasRef}
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(180deg, var(--bg) 0%, rgba(11,13,23,0) 26%, rgba(11,13,23,.5) 100%)",
+                }}
+              />
+            </>
+          }
+        >
           <Reveal as="figure" style={{ margin: 0, display: "flex", flexDirection: "column", gap: 28 }}>
             <p id="test-h" style={{ ...EYEBROW, color: "var(--ember)", display: "flex", alignItems: "center", gap: 14 }}>
               <span aria-hidden="true" style={{ width: 30, height: 1, background: "var(--ember)" }} />
@@ -430,8 +438,8 @@ export default function HomePage() {
                           width: 42,
                           height: 42,
                           borderRadius: "50%",
-                          background: "var(--accent)",
-                          color: "var(--bg)",
+                          background: "var(--accent-fill)",
+                          color: "var(--on-accent)",
                           display: "grid",
                           placeItems: "center",
                           font: "400 13px/1 var(--font-sans)",

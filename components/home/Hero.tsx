@@ -46,6 +46,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
   return (
     <section
       aria-label="Hallelujah Challenge"
+      className="hc-on-dark"
       style={{
         position: "relative",
         overflow: "clip",
@@ -77,7 +78,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(70% 60% at 50% 42%, rgba(11,13,23,.55), rgba(11,13,23,.92) 72%), linear-gradient(180deg, rgba(11,13,23,.9), rgba(11,13,23,.35) 32%, var(--bg))",
+            "radial-gradient(70% 60% at 50% 42%, rgba(11,13,23,.55), rgba(11,13,23,.92) 72%), linear-gradient(180deg, rgba(11,13,23,.92), rgba(11,13,23,.55) 42%, var(--bg) 100%)",
         }}
       />
       <div
