@@ -43,6 +43,17 @@ const EDITIONS: Record<string, Edition> = {
   oct25: { label: "October 2025", start: Date.UTC(2025, 9, 6), days: 26 },
 };
 
+/** The newest session in the current edition — its thumbnail is the player's
+    artwork, so the panel shows the real broadcast rather than a mock-up. */
+const LATEST_ID = "h7quyM65iVk";
+const LATEST_POSTER = `https://i.ytimg.com/vi/${LATEST_ID}/maxresdefault.jpg`;
+const STREAMS_URL = "https://www.youtube.com/@NathanielBasseyMain/streams";
+
+/** Editions before this one have no per-day video, so they share a still from
+    the gathering rather than a striped placeholder. */
+const REPLAY_FALLBACK =
+  "https://static.wixstatic.com/media/e178bc_d7e064dfa947410ba37c38e07e598a02~mv2.jpg/v1/fill/w_800,h_450,al_c,q_80,enc_auto/DSC00851.jpg";
+
 const SELECT: CSSProperties = {
   minHeight: 48,
   padding: "0 14px",
@@ -109,7 +120,7 @@ export default function WatchPage() {
       href: id ? "https://www.youtube.com/watch?v=" + id : "https://www.youtube.com/@NathanielBasseyMain/streams",
       bg: id
         ? "var(--surface) url(https://i.ytimg.com/vi/" + id + "/hqdefault.jpg) center/cover no-repeat"
-        : "repeating-linear-gradient(135deg, #161a2b 0 10px, #121524 10px 20px)",
+        : `#161a2b url(${REPLAY_FALLBACK}) center/cover no-repeat`,
       alt: "Replay for Day " + d + ", " + ed.label,
     };
   }).reverse();
@@ -160,7 +171,7 @@ export default function WatchPage() {
                     style={{
                       position: "absolute",
                       inset: 0,
-                      background: "repeating-linear-gradient(135deg, #151929 0 12px, rgba(17,20,34,0) 12px 24px), #121524",
+                      background: `#121524 url(${LATEST_POSTER}) center/cover no-repeat`,
                     }}
                   />
                   <div
@@ -169,22 +180,10 @@ export default function WatchPage() {
                       position: "absolute",
                       inset: 0,
                       background:
-                        "radial-gradient(ellipse at 50% 120%, var(--glow-ember), transparent 60%), linear-gradient(180deg, rgba(11,13,23,.2), rgba(11,13,23,.75))",
+                        "radial-gradient(60% 70% at 50% 50%, rgba(11,13,23,.88), rgba(11,13,23,.72) 70%), linear-gradient(180deg, rgba(11,13,23,.7), rgba(11,13,23,.88))",
+                      backdropFilter: "blur(3px)",
                     }}
                   />
-                  <span
-                    aria-hidden="true"
-                    style={{
-                      position: "absolute",
-                      right: 16,
-                      top: 16,
-                      font: "400 11px/1.4 var(--font-mono)",
-                      color: "var(--fg-muted)",
-                    }}
-                  >
-                    [ {platformName} embed &#183; poster still ]
-                  </span>
-
                   {live ? (
                     <>
                       <span
@@ -206,11 +205,16 @@ export default function WatchPage() {
                         <span className="hc-breathe" aria-hidden="true" style={{ width: 7, height: 7, borderRadius: "50%", background: "#fff" }} />
                         LIVE NOW
                       </span>
-                      <button
-                        type="button"
+                      <a
+                        href={STREAMS_URL}
+                        target="_blank"
+                        rel="noopener"
                         aria-label="Play live stream"
                         className="hc-t hc-pill-gold"
                         style={{
+                          display: "grid",
+                          placeItems: "center",
+                          textDecoration: "none",
                           position: "absolute",
                           left: "50%",
                           top: "50%",
@@ -226,7 +230,7 @@ export default function WatchPage() {
                         }}
                       >
                         &#9654;
-                      </button>
+                      </a>
                     </>
                   ) : (
                     <div
