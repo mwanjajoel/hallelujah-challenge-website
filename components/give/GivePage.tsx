@@ -58,6 +58,15 @@ const USES: Array<[string, string, string?]> = [
   ],
 ];
 
+/** The verified giving channels, in the order the portal lists them. */
+const CHANNELS: Array<[label: string, href: string]> = [
+  ["Bank Account Details", "https://www.hallelujahchallengelive.com/giving-hc"],
+  ["Payaza", "https://give.payaza.africa/hallelujahchallenge/feb2026"],
+  ["Flutterwave Card Payment", "https://flutterwave.com/pay/hallelujahchallenge"],
+  ["Flutterwave Account Number", "https://www.hallelujahchallengelive.com/flutter-giving-hc"],
+  ["Squad by HabariPay", "https://pay.squadco.com/link/hallelujahchallenge"],
+];
+
 const FIELD: CSSProperties = {
   minHeight: 52,
   padding: "0 16px",
@@ -309,17 +318,55 @@ export default function GivePage() {
                   </button>
                 </form>
               ) : (
-                <div role="status" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                <div role="status" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                   <Display size="md">
-                    Thank You for Your <Accent gold>Partnership!</Accent>
+                    Thank You for Your <Accent gold>Generous Heart!</Accent>
                   </Display>
                   <p style={{ margin: 0, font: "400 17px/1.7 var(--font-sans)", color: "var(--fg-muted)" }}>
-                    Your generous support in advancing the gospel is deeply appreciated. Please choose your preferred
-                    giving channel in the portal.
+                    We appreciate your partnership in advancing the gospel. Please select your preferred giving
+                    channel below:
                   </p>
-                  <p style={{ margin: 0, font: "400 15px/1.7 var(--font-sans)", color: "var(--fg-muted)" }}>
-                    The verified giving portal is not connected to this rebuild yet, so no channels are shown here.
-                  </p>
+
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))",
+                      gap: 12,
+                    }}
+                  >
+                    {CHANNELS.map(([label, href]) => (
+                      <li key={href}>
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener"
+                          className="hc-t hc-arrow hc-pill-outline-gold"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: 12,
+                            minHeight: 58,
+                            padding: "0 22px",
+                            borderRadius: "var(--r-sm)",
+                            border: "1px solid var(--hairline-strong)",
+                            background: "var(--bg)",
+                            color: "var(--fg)",
+                            font: "600 15px/1.3 var(--font-sans)",
+                            textDecoration: "none",
+                          }}
+                        >
+                          {label}
+                          <span data-mark aria-hidden="true">
+                            &rarr;
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </Card>
