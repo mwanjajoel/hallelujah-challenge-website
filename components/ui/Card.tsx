@@ -58,12 +58,19 @@ export default function Card({
           style={{
             position: "absolute",
             inset: 0,
+            zIndex: 0,
             background: `radial-gradient(70% 70% at ${glowAt}, var(--glow-${glow}), transparent 72%)`,
             pointerEvents: "none",
           }}
         />
       )}
-      <div style={{ position: "relative" }}>{children}</div>
+      {/* height:100% matters: this wrapper is the containing block for any
+          absolutely positioned child, and without it a card whose children are
+          all absolute (a player, a video) collapses the wrapper to zero height,
+          so `inset: 0` resolves against nothing and the content spills out of
+          the top. Against an auto-height card this resolves to auto, so
+          ordinary cards are unaffected. */}
+      <div style={{ position: "relative", zIndex: 1, height: "100%" }}>{children}</div>
     </div>
   );
 }
