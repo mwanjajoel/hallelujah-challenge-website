@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useState, type CSSProperties } from "react";
+import { session } from "@/lib/session";
 import { useElementWidth } from "@/lib/useElementWidth";
+import { useNow, useSessionMode } from "@/lib/useSessionClock";
 
 export type NavKey =
   | "home"
@@ -19,18 +21,17 @@ export type NavKey =
 /** Label, href, key. Order matters: the mobile sheet numbers them in sequence. */
 const ALL: Array<[string, string, NavKey]> = [
   ["Home", "/", "home"],
-  ["Int", "#", "int"],
-  ["New Converts", "#", "newconverts"],
-  ["About", "/#about", "about"],
-  ["Testimonies", "/testimonies", "testimonies"],
+  ["About", "/about", "about"],
   ["Watch Live", "/watch", "watch"],
+  ["Testimonies", "/testimonies", "testimonies"],
+  ["Prayer Points", "/prayer-points", "prayerpoints"],
+  ["Ask Room", "/ask-room", "askroom"],
+  ["Int'l Guests", "/international", "int"],
   ["Partnership/Giving", "/give", "give"],
-  ["Ask Room Prayers", "#", "askroom"],
-  ["Prayer Points", "#", "prayerpoints"],
-  ["Contact", "#", "contact"],
+  ["Contact", "/contact", "contact"],
 ];
 
-const DESKTOP_KEYS: NavKey[] = ["about", "testimonies", "watch", "askroom", "prayerpoints", "contact"];
+const DESKTOP_KEYS: NavKey[] = ["about", "watch", "testimonies", "prayerpoints", "askroom", "contact"];
 
 const NAV_LINK: CSSProperties = {
   position: "relative",
@@ -45,9 +46,14 @@ const NAV_LINK: CSSProperties = {
   whiteSpace: "nowrap",
 };
 
-export default function SiteHeader({ active = "home", live = false }: { active?: NavKey; live?: boolean }) {
+export default function SiteHeader({ active = "home" }: { active?: NavKey }) {
   const [width, rootRef] = useElementWidth();
   const [open, setOpen] = useState(false);
+  // Sourced here rather than passed in, so the banner is correct on every page
+  // rather than only the two that happened to thread the prop through.
+  const now = useNow();
+  const mode = useSessionMode();
+  const { live } = now === null ? { live: false } : session(now, mode);
 
   const mobile = width < 1200;
   const links = (mobile ? ALL : ALL.filter((l) => DESKTOP_KEYS.includes(l[2]))).map(([label, href, k], i) => ({

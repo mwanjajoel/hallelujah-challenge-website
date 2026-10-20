@@ -3,18 +3,17 @@ import type { CSSProperties } from "react";
 import Reveal from "@/components/ui/Reveal";
 
 const PRIMARY: Array<[string, string]> = [
-  ["About", "/#about"],
-  ["Testimonies", "/testimonies"],
+  ["About", "/about"],
   ["Watch Live", "/watch"],
+  ["Testimonies", "/testimonies"],
   ["Partnership", "/give"],
 ];
 
 const SECONDARY: Array<[string, string]> = [
-  ["Int'l Guests", "#"],
-  ["New Converts", "#"],
-  ["Ask Room Prayers", "#"],
-  ["Prayer Points", "#"],
-  ["Contact", "#"],
+  ["Prayer Points", "/prayer-points"],
+  ["Ask Room", "/ask-room"],
+  ["Int'l Guests", "/international"],
+  ["Contact", "/contact"],
 ];
 
 const SERIF_LINK: CSSProperties = {

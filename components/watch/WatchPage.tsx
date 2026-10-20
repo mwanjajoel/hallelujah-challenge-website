@@ -124,7 +124,7 @@ export default function WatchPage() {
   return (
     <>
       <div style={{ position: "sticky", top: 0, zIndex: 50 }}>
-        <SiteHeader active="watch" live={live} />
+        <SiteHeader active="watch" />
       </div>
 
       <main>

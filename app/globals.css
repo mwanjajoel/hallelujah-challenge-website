@@ -330,6 +330,56 @@ textarea::placeholder {
   outline: none;
 }
 
+/* Disclosure rows. Native <details> so it works without JavaScript and keeps
+   the browser's own keyboard and screen-reader behaviour. */
+.hc-faq {
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--glass);
+  overflow: clip;
+  transition: border-color var(--d-hover) var(--ease);
+}
+
+.hc-faq:hover,
+.hc-faq[open] {
+  border-color: rgba(212, 166, 74, 0.45);
+}
+
+.hc-faq summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+  font: 500 clamp(16px, 1.4vw, 19px) / 1.45 var(--font-sans);
+  color: var(--fg);
+}
+
+.hc-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.hc-faq summary [data-chev] {
+  flex: none;
+  font: 300 22px/1 var(--font-sans);
+  color: var(--accent);
+  transition: transform var(--d-hover) var(--ease);
+}
+
+.hc-faq[open] summary [data-chev] {
+  transform: rotate(45deg);
+}
+
+.hc-faq p {
+  margin: 0;
+  padding: 0 24px 22px 56px;
+  font: 400 16px/1.7 var(--font-sans);
+  color: var(--fg-muted);
+  text-wrap: pretty;
+}
+
 /* An arrow link whose mark slides on hover. */
 .hc-arrow span[data-mark] {
   display: inline-block;

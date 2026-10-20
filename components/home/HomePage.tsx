@@ -129,7 +129,7 @@ export default function HomePage() {
   return (
     <>
       <div style={{ position: "sticky", top: 0, zIndex: 50 }}>
-        <SiteHeader active="home" live={live} />
+        <SiteHeader active="home" />
       </div>
 
       <main>
@@ -469,15 +469,22 @@ export default function HomePage() {
               index={1}
               style={{ flex: "2 1 480px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "22px 36px" }}
             >
+              {/* Served locally rather than from the Wix CDN: the originals
+                  were 1.4MB between them and often had not arrived by the time
+                  the section scrolled into view. */}
               <img
-                src={W + "8120e4_e6f2a031e79e46eaa070348f0d4adfe4~mv2.png/v1/crop/x_320,y_345,w_1950,h_895/fill/w_1688,h_778,al_c,q_90,enc_auto/hc-partners.png"}
-                alt="Our partners"
+                src="/assets/hc-partners.webp"
+                alt="Partners of the Hallelujah Challenge"
+                width={1240}
+                height={569}
                 loading="lazy"
                 style={{ flex: "2 1 340px", width: "100%", maxWidth: 620, height: "auto", display: "block" }}
               />
               <img
-                src={W + "8120e4_ab407cca53d5439fb8ebbd81347849ea~mv2.png/v1/crop/x_524,y_310,w_917,h_566/fill/w_918,h_531,al_c,q_90,enc_auto/HC-Oct-2026-WEB-konga.png"}
-                alt="Our partners"
+                src="/assets/hc-partner-konga.webp"
+                alt="Konga, partner of the Hallelujah Challenge"
+                width={580}
+                height={358}
                 loading="lazy"
                 style={{ flex: "1 1 190px", width: "100%", maxWidth: 290, height: "auto", display: "block", borderRadius: 12 }}
               />
