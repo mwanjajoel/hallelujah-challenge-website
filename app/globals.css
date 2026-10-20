@@ -54,13 +54,18 @@
   --header: rgba(255, 255, 255, 0.82);
 
   /* --- hero -------------------------------------------------------------
-     The headline sits over footage, so the veil over that footage has to
-     flip with the theme as well as the ink. On white the video is held well
-     back and reads as texture rather than picture. */
+     The headline sits over photography, so the veil over it flips with the
+     theme as well as the ink. The veil is an ellipse tucked behind the text
+     column rather than a sheet over the whole band: the header sits above
+     the hero rather than on it, so veiling the top only washed the picture
+     out for nothing. The outer thirds and the top are left clear, and the
+     halo below carries the legibility the removed veil used to. */
   --hero-bg: #ffffff;
   --hero-video: 1;
-  --hero-scrim: radial-gradient(58% 54% at 50% 48%, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.54) 66%, rgba(255, 255, 255, 0.4) 100%);
-  --hero-base: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.12) 34%, rgba(255, 255, 255, 0.55) 82%, var(--bg) 100%);
+  --hero-scrim: radial-gradient(50% 56% at 50% 52%, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.24) 58%, rgba(255, 255, 255, 0) 100%);
+  --hero-base: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 22%, rgba(255, 255, 255, 0) 68%, rgba(255, 255, 255, 0.46) 90%, var(--bg) 100%);
+  --hero-halo: 0 0 3px rgba(255, 255, 255, 0.95), 0 0 14px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.7),
+    0 0 80px rgba(255, 255, 255, 0.45);
   --hero-art-shadow: drop-shadow(0 24px 50px rgba(20, 23, 42, 0.26));
 
   /* Edge ramp for the dark testimony band, from the page into the dawn sky. */
@@ -134,8 +139,10 @@
 
   --hero-bg: #0b0d17;
   --hero-video: 1;
-  --hero-scrim: radial-gradient(70% 60% at 50% 42%, rgba(11, 13, 23, 0.55), rgba(11, 13, 23, 0.92) 72%);
-  --hero-base: linear-gradient(180deg, rgba(11, 13, 23, 0.92), rgba(11, 13, 23, 0.55) 42%, var(--bg) 100%);
+  --hero-scrim: radial-gradient(56% 60% at 50% 52%, rgba(11, 13, 23, 0.5), rgba(11, 13, 23, 0.24) 60%, rgba(11, 13, 23, 0) 100%);
+  --hero-base: linear-gradient(180deg, rgba(11, 13, 23, 0.6), rgba(11, 13, 23, 0.06) 26%, rgba(11, 13, 23, 0) 66%, rgba(11, 13, 23, 0.82) 92%, var(--bg) 100%);
+  --hero-halo: 0 0 3px rgba(11, 13, 23, 0.95), 0 0 16px rgba(11, 13, 23, 0.9), 0 0 48px rgba(11, 13, 23, 0.72),
+    0 0 90px rgba(11, 13, 23, 0.5);
   --hero-art-shadow: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 60px rgba(60, 90, 220, 0.25));
 
   --band-ramp: var(--bg) 0%, #100e1f 100%;
@@ -313,6 +320,16 @@ textarea::placeholder {
   to {
     transform: translateX(-50%);
   }
+}
+
+/* The hero type sits directly on the photography now that the veil behind it
+   has been pulled back to an ellipse. The halo is what buys that back: it
+   carries the page colour a short way out from each glyph, so the type holds
+   its contrast against a bright or busy frame without a sheet over the whole
+   picture. It is the page colour in both themes, so it reads as the type
+   lifting off the image rather than as a glow. */
+.hc-hero-type {
+  text-shadow: var(--hero-halo);
 }
 
 /* Ambient loops. Alternating direction keeps them from looking like a reset,

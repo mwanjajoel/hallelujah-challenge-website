@@ -44,18 +44,23 @@ interface Props {
  * the verse behind it, and when tonight's session begins.
  */
 export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
-  const [slide, setSlide] = useState(0);
+  // The outgoing slide is tracked as well as the incoming one. A plain
+  // crossfade — one layer to 0 while another comes up from 0 — leaves both
+  // part-way at the midpoint, so the page colour shows between them and the
+  // photography visibly pales for a second of every cycle. Holding the
+  // outgoing frame opaque underneath and bringing the new one up on top of it
+  // means there is never a gap for the background to come through.
+  const [[prev, slide], setPair] = useState<[number, number]>([0, 0]);
   const paused = useRef(false);
   const reduced = useRef(false);
 
-  // Crossfade on a timer. Opacity only: transitioning visibility leaves
-  // descendants stale in Chromium, which is what blanked the original
-  // carousel on this page.
+  // Opacity only: transitioning visibility leaves descendants stale in
+  // Chromium, which is what blanked the original carousel on this page.
   useEffect(() => {
     reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced.current) return;
     const id = setInterval(() => {
-      if (!paused.current) setSlide((i) => (i + 1) % SLIDES.length);
+      if (!paused.current) setPair(([, cur]) => [cur, (cur + 1) % SLIDES.length]);
     }, SLIDE_MS);
     return () => clearInterval(id);
   }, []);
@@ -94,7 +99,11 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           legible. The footage is the first frame of the cycle. */}
       <div
         aria-hidden="true"
-        style={{ position: "absolute", inset: 0, background: "var(--hero-bg)" }}
+        // isolate: the layers below stack against each other so the incoming
+        // frame covers the outgoing one. Without a stacking context here that
+        // ordering escapes to the root and the backdrop paints over the
+        // headline instead.
+        style={{ position: "absolute", inset: 0, background: "var(--hero-bg)", isolation: "isolate" }}
       >
         {SLIDES.map((s, i) => (
           <div
@@ -103,7 +112,11 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
               position: "absolute",
               inset: 0,
               background: `url(${s.image}) center/cover no-repeat`,
-              opacity: i === slide ? "var(--hero-video)" : 0,
+              // The outgoing frame stays opaque but drops below the incoming
+              // one, so the fade happens over a picture rather than over the
+              // page.
+              zIndex: i === slide ? 2 : i === prev ? 1 : 0,
+              opacity: i === slide || i === prev ? "var(--hero-video)" : 0,
               transform: i === slide ? "scale(1.04)" : "scale(1)",
               transition: `opacity 1.6s var(--ease), transform ${SLIDE_MS + 1600}ms linear`,
             }}
@@ -154,11 +167,21 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           maxWidth: "var(--col-wide)",
         }}
       >
+        {/* The one eyebrow on the site that sits on photography rather than
+            on the page, and the lightened veil no longer carries it. Gold on
+            12px mono needs a surface of its own, so it borrows the glass the
+            cards use — which already flips with the theme. */}
         <p
           className="hc-reveal"
           data-in="true"
           style={{
             margin: 0,
+            padding: "8px 16px",
+            borderRadius: "var(--r-pill)",
+            background: "var(--glass)",
+            border: "1px solid var(--hairline)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
             font: "500 12px/1 var(--font-mono)",
             letterSpacing: ".14em",
             color: "var(--accent)",
@@ -183,16 +206,19 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           }}
         />
 
-        <Display as="h1" size="hero" style={{ maxWidth: "17ch" }}>
+        <Display as="h1" size="hero" className="hc-hero-type" style={{ maxWidth: "17ch" }}>
           The Lord reigns, Let the peoples <Accent gold>tremble!</Accent>
         </Display>
 
         <p
+          className="hc-hero-type"
           style={{
             margin: 0,
             maxWidth: "46ch",
             font: "400 clamp(17px, 1.5vw, 21px)/1.6 var(--font-sans)",
-            color: "var(--fg-dim)",
+            /* Full ink rather than --fg-dim: the dimmed tone is calibrated
+               for the page, and this line sits on photography. */
+            color: "var(--fg)",
             textWrap: "pretty",
           }}
         >
@@ -228,6 +254,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
             role="timer"
             aria-label={timerLabel}
             suppressHydrationWarning
+            className="hc-hero-type"
             style={{
               margin: 0,
               font: "400 clamp(44px, 7.5vw, 104px)/0.9 var(--font-display)",
@@ -274,7 +301,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
               aria-selected={i === slide}
               aria-label={s.label}
               title={s.label}
-              onClick={() => setSlide(i)}
+              onClick={() => setPair(([, cur]) => (cur === i ? [cur, cur] : [cur, i]))}
               className="hc-t"
               style={{
                 width: i === slide ? 30 : 9,
