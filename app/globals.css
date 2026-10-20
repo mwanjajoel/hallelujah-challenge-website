@@ -45,9 +45,9 @@
   --ink: #14172a;
 
   /* --- glows: kept faint on white, or they turn to haze ----------------- */
-  --glow-gold: rgba(212, 166, 74, 0.2);
-  --glow-blue: rgba(40, 62, 170, 0.1);
-  --glow-ember: rgba(224, 138, 79, 0.14);
+  --glow-gold: rgba(212, 166, 74, 0.34);
+  --glow-blue: rgba(40, 62, 170, 0.26);
+  --glow-ember: rgba(224, 138, 79, 0.28);
 
   /* --- glass ------------------------------------------------------------- */
   --glass: rgba(255, 255, 255, 0.72);
@@ -267,10 +267,10 @@ textarea::placeholder {
 
 @keyframes hc-drift {
   from {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate(0, 0) rotate(0deg) scale(1);
   }
   to {
-    transform: translate(-18px, -14px) rotate(-6deg);
+    transform: translate(-46px, -32px) rotate(-9deg) scale(1.06);
   }
 }
 
