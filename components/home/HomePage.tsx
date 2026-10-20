@@ -306,8 +306,21 @@ export default function HomePage() {
               <div
                 style={{
                   position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(180deg, var(--bg) 0%, rgba(11,13,23,0) 26%, rgba(11,13,23,.5) 100%)",
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  height: "clamp(70px, 9vw, 120px)",
+                  background: "linear-gradient(180deg, var(--band-ramp))",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: "clamp(70px, 9vw, 120px)",
+                  background: "linear-gradient(0deg, var(--band-ramp))",
                 }}
               />
             </>

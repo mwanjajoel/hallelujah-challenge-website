@@ -62,6 +62,9 @@
   --hero-scrim: radial-gradient(70% 60% at 50% 42%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.9) 72%);
   --hero-base: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.62) 42%, var(--bg) 100%);
   --hero-art-shadow: drop-shadow(0 24px 50px rgba(20, 23, 42, 0.26));
+
+  /* Edge ramp for the dark testimony band, from the page into the dawn sky. */
+  --band-ramp: var(--bg) 0%, #ecdcd4 34%, #8d5a53 70%, #3a2130 88%, #100e1f 100%;
   --hairline: rgba(20, 23, 42, 0.12);
   --hairline-strong: rgba(20, 23, 42, 0.26);
 
@@ -134,6 +137,8 @@
   --hero-scrim: radial-gradient(70% 60% at 50% 42%, rgba(11, 13, 23, 0.55), rgba(11, 13, 23, 0.92) 72%);
   --hero-base: linear-gradient(180deg, rgba(11, 13, 23, 0.92), rgba(11, 13, 23, 0.55) 42%, var(--bg) 100%);
   --hero-art-shadow: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 60px rgba(60, 90, 220, 0.25));
+
+  --band-ramp: var(--bg) 0%, #100e1f 100%;
   --hairline: rgba(246, 241, 231, 0.1);
   --hairline-strong: rgba(246, 241, 231, 0.22);
 
