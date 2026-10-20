@@ -9,55 +9,57 @@ import Card from "@/components/ui/Card";
 import Display, { Accent } from "@/components/ui/Display";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
-import { countdown, pad, session } from "@/lib/session";
+import { countdown, session } from "@/lib/session";
 import { useNow, useSessionMode } from "@/lib/useSessionClock";
 
 const STREAMS_URL = "https://www.youtube.com/@NathanielBasseyMain/streams";
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.hallelujahchallengelive&hl=en";
 
-/** Name, handle, and where "Open in …" should go. Only the destinations that
-    could be verified carry a URL; the rest render without a link rather than
-    pointing somewhere guessed. */
-const PLATFORMS: Array<[name: string, handle: string, url?: string]> = [
+/**
+ * Where the session can actually be watched.
+ *
+ * Facebook, Instagram Live and a Mixlr audio stream were listed here too,
+ * with handles. Nothing the ministry publishes mentions any of them: there
+ * is not one facebook.com, instagram.com or mixlr.com link anywhere on
+ * hallelujahchallengelive.com. Telling someone to go and watch somewhere
+ * there may be nothing to watch is worse than a shorter list, so the list is
+ * the two destinations that could be confirmed — the channel the live site
+ * itself links to, and the app on Google Play.
+ */
+const PLATFORMS: Array<[name: string, handle: string, url: string]> = [
   ["YouTube", "Nathaniel Bassey Main", STREAMS_URL],
-  ["Facebook", "Nathaniel Bassey"],
-  ["Instagram Live", "@nathanielblow"],
-  ["Mixlr audio", "Audio stream, low data"],
   ["HC App", "Official HC app", PLAY_STORE_URL],
 ];
 
-interface Edition {
-  label: string;
-  start: number;
-  days: number;
-  ids?: string[];
-}
-
-const EDITIONS: Record<string, Edition> = {
-  oct26: {
-    label: "October 2026 · The Lord Reigns",
-    start: Date.UTC(2026, 9, 5),
-    days: 13,
-    ids: [
-      "-saBS2ggyi4", "Dvp9hyZW2Ys", "2Dxd2wwRLLc", "hUWaCZzU31U", "SN4z3UyvFVE",
-      "18KAjo4RmVU", "adUtqYoDOw0", "i0O00TOi-Kw", "FmECe4ZcXB0", "CCDHi8mjfb4",
-      "rkc184yQ-kM", "NyDXTX1ghK0", "h7quyM65iVk",
-    ],
-  },
-  jun26: { label: "June 2026", start: Date.UTC(2026, 5, 1), days: 26 },
-  jan26: { label: "January 2026", start: Date.UTC(2026, 0, 6), days: 26 },
-  oct25: { label: "October 2025", start: Date.UTC(2025, 9, 6), days: 26 },
+/**
+ * The current edition, and the only one listed.
+ *
+ * Every day below is a real broadcast: the thirteen ids were each checked
+ * against YouTube and are Days 1 to 13 of "HALLELUJAH CHALLENGE || OCT 2026"
+ * on the ministry's own channel, in order. The start date is Day 1's upload
+ * date, and the length is how many days actually aired.
+ *
+ * Three further editions used to sit beside this one — June 2026, January
+ * 2026 and October 2025 — each rendering twenty-six day tiles with a date on
+ * every one. None of those dates or day counts could be confirmed against
+ * anything the ministry publishes, so rather than keep an archive the site
+ * was inventing, earlier editions are a link to the channel.
+ */
+const EDITION = {
+  label: "October 2026 · The Lord Reigns",
+  start: Date.UTC(2026, 9, 5),
+  ids: [
+    "-saBS2ggyi4", "Dvp9hyZW2Ys", "2Dxd2wwRLLc", "hUWaCZzU31U", "SN4z3UyvFVE",
+    "18KAjo4RmVU", "adUtqYoDOw0", "i0O00TOi-Kw", "FmECe4ZcXB0", "CCDHi8mjfb4",
+    "rkc184yQ-kM", "NyDXTX1ghK0", "h7quyM65iVk",
+  ],
 };
 
 /** The newest session in the current edition — its thumbnail is the player's
     artwork, so the panel shows the real broadcast rather than a mock-up. */
 const LATEST_ID = "h7quyM65iVk";
 const LATEST_POSTER = `https://i.ytimg.com/vi/${LATEST_ID}/maxresdefault.jpg`;
-/** Editions before this one have no per-day video, so they share a still from
-    the gathering rather than a striped placeholder. */
-const REPLAY_FALLBACK =
-  "https://static.wixstatic.com/media/e178bc_d7e064dfa947410ba37c38e07e598a02~mv2.jpg/v1/fill/w_800,h_450,al_c,q_80,enc_auto/DSC00851.jpg";
 
 const SELECT: CSSProperties = {
   minHeight: 48,
@@ -88,8 +90,6 @@ export default function WatchPage() {
   const now = useNow();
   const mode = useSessionMode();
   const [platform, setPlatform] = useState(0);
-  const [audio, setAudio] = useState(false);
-  const [edition, setEdition] = useState("oct26");
   const [day, setDay] = useState("all");
 
   const { live, rem } = now === null ? { live: false, rem: 0 } : session(now, mode);
@@ -107,25 +107,23 @@ export default function WatchPage() {
           timeZoneName: "short",
         });
 
-  const ed = EDITIONS[edition];
+  const ed = EDITION;
 
-  const all = Array.from({ length: ed.days }, (_, i) => {
+  // Each tile is one real broadcast. There used to be a runtime here too,
+  // printed as "1:28:43" and the like — but it was `5200 + ((day * 7919 +
+  // days * 31) % 1700)` seconds, a hash dressed up as a fact. A duration we
+  // do not have is not shown.
+  const all = ed.ids.map((id, i) => {
     const d = i + 1;
     const dt = new Date(ed.start + i * 86400000);
-    const secs = 5200 + ((d * 7919 + ed.days * 31) % 1700);
-    const dur = Math.floor(secs / 3600) + ":" + pad(Math.floor((secs % 3600) / 60)) + ":" + pad(secs % 60);
     const date = dt
       .toLocaleDateString("en-GB", { month: "short", day: "numeric", timeZone: "UTC" })
       .replace(/(\d+) (\w+)/, "$2 $1");
-    const id = ed.ids?.[i];
     return {
       day: d,
       date,
-      dur: id ? "YOUTUBE" : dur,
-      href: id ? "https://www.youtube.com/watch?v=" + id : "https://www.youtube.com/@NathanielBasseyMain/streams",
-      bg: id
-        ? "var(--surface) url(https://i.ytimg.com/vi/" + id + "/hqdefault.jpg) center/cover no-repeat"
-        : `#161a2b url(${REPLAY_FALLBACK}) center/cover no-repeat`,
+      href: "https://www.youtube.com/watch?v=" + id,
+      bg: "var(--surface) url(https://i.ytimg.com/vi/" + id + "/hqdefault.jpg) center/cover no-repeat",
       alt: "Replay for Day " + d + ", " + ed.label,
     };
   }).reverse();
@@ -153,7 +151,12 @@ export default function WatchPage() {
             }}
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <p style={EYEBROW}>OCTOBER 2026 &#183; THE LORD REIGNS &#183; DAY 15 OF 26</p>
+              {/* Was "DAY 15 OF 26". The edition ran thirteen nights, and its last was
+                  17 October, so both halves of that were wrong. Counted from the
+                  broadcasts themselves rather than written down again. */}
+              <p style={EYEBROW}>
+                OCTOBER 2026 &#183; THE LORD REIGNS &#183; {ed.ids.length} NIGHTS
+              </p>
               <Display as="h1" size="xl">
                 Watch <Accent gold>live</Accent>
               </Display>
@@ -349,57 +352,6 @@ export default function WatchPage() {
 
             <aside style={{ flex: "1 1 310px", minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
               <Reveal index={1}>
-                <Card radius="lg" aria-labelledby="audio-h" style={{ padding: 28 }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <span
-                      style={{
-                        alignSelf: "flex-start",
-                        padding: "5px 10px",
-                        borderRadius: "var(--r-pill)",
-                        border: "1px solid var(--fg-muted)",
-                        color: "var(--fg-muted)",
-                        font: "500 11px/1 var(--font-mono)",
-                        letterSpacing: ".06em",
-                      }}
-                    >
-                      LOW DATA
-                    </span>
-                    <Display id="audio-h" size="sm">
-                      Low on data? Listen to the audio stream.
-                    </Display>
-                    <p style={{ margin: 0, font: "400 16px/1.55 var(--font-sans)", color: "var(--fg-muted)" }}>
-                      Audio only on Mixlr. It uses far less data than video and keeps playing with your screen off.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setAudio((a) => !a)}
-                      aria-pressed={audio}
-                      className="hc-t hc-pill-tint"
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 10,
-                        minHeight: 52,
-                        borderRadius: "var(--r-pill)",
-                        border: "1px solid var(--accent)",
-                        background: "transparent",
-                        color: "var(--fg)",
-                        font: "600 16px/1 var(--font-sans)",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <span aria-hidden="true" style={{ fontSize: 12, color: "var(--accent)" }}>
-                        {audio ? "❚❚" : "▶"}
-                      </span>
-                      {audio ? "Pause audio" : "Listen to audio only"}
-                    </button>
-                    <ArrowLink href="#">Get free data (Nigeria)</ArrowLink>
-                  </div>
-                </Card>
-              </Reveal>
-
-              <Reveal index={2}>
                 <Card radius="lg" glow="blue" glowAt="0% 0%" aria-labelledby="tonight-h" style={{ padding: 28 }}>
                   <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                     <p id="tonight-h" style={{ ...EYEBROW, color: "var(--fg-muted)" }}>
@@ -446,29 +398,24 @@ export default function WatchPage() {
               </Display>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-              <label style={LABEL}>
+              <p style={{ ...LABEL, gap: 8 }}>
                 Edition
-                <select
-                  value={edition}
-                  onChange={(e) => {
-                    setEdition(e.target.value);
-                    setDay("all");
-                  }}
-                  className="hc-t hc-input"
-                  style={{ ...SELECT, minWidth: 220 }}
+                <span style={{ font: "600 16px/1.4 var(--font-sans)", color: "var(--fg)" }}>{ed.label}</span>
+                <a
+                  href={STREAMS_URL}
+                  target="_blank"
+                  rel="noopener"
+                  className="hc-t"
+                  style={{ font: "500 14px/1 var(--font-sans)", color: "var(--accent)", textUnderlineOffset: 4 }}
                 >
-                  {Object.entries(EDITIONS).map(([id, e]) => (
-                    <option key={id} value={id}>
-                      {e.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                  Earlier editions on YouTube
+                </a>
+              </p>
               <label style={LABEL}>
                 Day
                 <select value={day} onChange={(e) => setDay(e.target.value)} className="hc-t hc-input" style={{ ...SELECT, minWidth: 140 }}>
                   <option value="all">All days</option>
-                  {Array.from({ length: ed.days }, (_, i) => (
+                  {Array.from({ length: ed.ids.length }, (_, i) => (
                     <option key={i} value={String(i + 1)}>
                       Day {i + 1}
                     </option>
@@ -490,7 +437,7 @@ export default function WatchPage() {
             }}
           >
             {replays.map((r, i) => (
-              <Reveal key={edition + "-" + r.day} variant="sharpen" index={i % 8}>
+              <Reveal key={r.day} variant="sharpen" index={i % 8}>
                 <a
                   href={r.href}
                   target="_blank"
@@ -520,11 +467,11 @@ export default function WatchPage() {
                         fontVariantNumeric: "tabular-nums",
                       }}
                     >
-                      {r.dur}
+                      {"Day " + r.day}
                     </span>
                   </div>
                   <p style={{ margin: 0, font: "500 15px/1.3 var(--font-sans)", fontVariantNumeric: "tabular-nums" }}>
-                    Day {r.day} &#183; {r.date} &#183; <span style={{ color: "var(--fg-muted)" }}>{r.dur}</span>
+                    Day {r.day} &#183; {r.date}
                   </p>
                 </a>
               </Reveal>
