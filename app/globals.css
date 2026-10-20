@@ -52,6 +52,16 @@
   /* --- glass ------------------------------------------------------------- */
   --glass: rgba(255, 255, 255, 0.72);
   --header: rgba(255, 255, 255, 0.82);
+
+  /* --- hero -------------------------------------------------------------
+     The headline sits over footage, so the veil over that footage has to
+     flip with the theme as well as the ink. On white the video is held well
+     back and reads as texture rather than picture. */
+  --hero-bg: #ffffff;
+  --hero-video: 0.18;
+  --hero-scrim: radial-gradient(70% 60% at 50% 42%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.9) 72%);
+  --hero-base: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.62) 42%, var(--bg) 100%);
+  --hero-art-shadow: drop-shadow(0 24px 50px rgba(20, 23, 42, 0.26));
   --hairline: rgba(20, 23, 42, 0.12);
   --hairline-strong: rgba(20, 23, 42, 0.26);
 
@@ -118,6 +128,12 @@
 
   --glass: rgba(6, 8, 16, 0.45);
   --header: rgba(11, 13, 23, 0.72);
+
+  --hero-bg: #0b0d17;
+  --hero-video: 0.55;
+  --hero-scrim: radial-gradient(70% 60% at 50% 42%, rgba(11, 13, 23, 0.55), rgba(11, 13, 23, 0.92) 72%);
+  --hero-base: linear-gradient(180deg, rgba(11, 13, 23, 0.92), rgba(11, 13, 23, 0.55) 42%, var(--bg) 100%);
+  --hero-art-shadow: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 60px rgba(60, 90, 220, 0.25));
   --hairline: rgba(246, 241, 231, 0.1);
   --hairline-strong: rgba(246, 241, 231, 0.22);
 

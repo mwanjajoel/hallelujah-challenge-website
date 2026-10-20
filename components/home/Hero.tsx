@@ -46,7 +46,6 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
   return (
     <section
       aria-label="Hallelujah Challenge"
-      className="hc-on-dark"
       style={{
         position: "relative",
         overflow: "clip",
@@ -58,7 +57,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
       }}
     >
       {/* Backdrop: footage, then enough gradient to keep text legible. */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: `#0B0D17 url(${POSTER}) center/cover no-repeat` }}>
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: `var(--hero-bg) url(${POSTER}) center/cover no-repeat` }}>
         <video
           ref={setVideo}
           autoPlay
@@ -67,7 +66,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           playsInline
           preload="metadata"
           poster={POSTER}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.55 }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: "var(--hero-video)" }}
         >
           <source src={VIDEO} type="video/mp4" />
         </video>
@@ -77,8 +76,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "radial-gradient(70% 60% at 50% 42%, rgba(11,13,23,.55), rgba(11,13,23,.92) 72%), linear-gradient(180deg, rgba(11,13,23,.92), rgba(11,13,23,.55) 42%, var(--bg) 100%)",
+          background: "var(--hero-scrim), var(--hero-base)",
         }}
       />
       <div
@@ -127,7 +125,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
             width: "clamp(190px, 26vw, 360px)",
             height: "auto",
             display: "block",
-            filter: "drop-shadow(0 30px 70px rgba(0,0,0,.6)) drop-shadow(0 0 60px rgba(60,90,220,.25))",
+            filter: "var(--hero-art-shadow)",
           }}
         />
 
