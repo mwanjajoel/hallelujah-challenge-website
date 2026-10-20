@@ -150,10 +150,6 @@ export default function HomePage() {
         {/* ------------------------------------------------------------ ABOUT */}
         <Section id="about" aria-label="About" width="text" glow="blue" glowAt="18% 12%">
           <Reveal style={{ display: "flex", flexDirection: "column", gap: "clamp(22px, 2.8vw, 36px)" }}>
-            <p style={EYEBROW}>WHAT IT IS</p>
-            <Display size="lg" style={{ maxWidth: "20ch" }}>
-              An hour of praise unto the Lord, <Accent>every night</Accent>.
-            </Display>
             <p
               style={{
                 margin: 0,
@@ -191,7 +187,6 @@ export default function HomePage() {
         {/* ---------------------------------------------------------- GALLERY */}
         <Section aria-labelledby="mountain-h" tight>
           <Reveal style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: "clamp(26px, 4vw, 50px)" }}>
-            <p style={EYEBROW}>THE GATHERING</p>
             <Display id="mountain-h" size="xl" style={{ maxWidth: "16ch" }}>
               A mountain of <Accent>praise and worship</Accent>
             </Display>
@@ -270,7 +265,6 @@ export default function HomePage() {
             </Reveal>
 
             <Reveal index={1} style={{ display: "flex", flexDirection: "column", gap: "clamp(18px, 2.2vw, 28px)" }}>
-              <p style={EYEBROW}>THE HEART OF IT</p>
               <Display id="creating-h" size="lg" style={{ maxWidth: "13ch" }}>
                 Creating a world of <Accent gold>Hallelujah</Accent>
               </Display>
@@ -285,7 +279,7 @@ export default function HomePage() {
                 We&rsquo;re grateful for the opportunity to make a difference and inspire lives worldwide through the
                 grace of Jesus.
               </p>
-              <ArrowLink href="/testimonies">See what God has done</ArrowLink>
+              <ArrowLink href="/testimonies">More</ArrowLink>
             </Reveal>
           </div>
         </Section>
@@ -341,9 +335,11 @@ export default function HomePage() {
                 textWrap: "pretty",
               }}
             >
-              I stumbled on the program during the HC in October 2023 while in back pain. Pastor Nathaniel kept saying
-              God was healing lower back pain. I knew and believed it was me, because God led me to HC.{" "}
-              <Accent gold>I reside in the USA, and God healed me.</Accent>
+              I stumbled on the program during the HC in October 2023 while in back pain. I joined, and Pastor
+              Nathaniel kept saying God was healing lower back pain. I knew and believed it was me because God led me
+              to HC. <Accent gold>I reside in the USA, and God healed me.</Accent> He has enabled me to join even the
+              February edition and the Perfected Praise I saw on the first day, and I believe unprecedented marvels
+              will manifest in my life. Thanks for honoring the call and your humble dedication.
             </blockquote>
             <figcaption
               style={{
@@ -360,7 +356,7 @@ export default function HomePage() {
           </Reveal>
           <Reveal index={1} style={{ marginTop: 42 }}>
             <ArrowLink href="/testimonies" variant="cream">
-              Read more testimonies
+              Read More Testimonies
             </ArrowLink>
           </Reveal>
         </Section>
@@ -379,7 +375,6 @@ export default function HomePage() {
             }}
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={EYEBROW}>EVERY NIGHT, KEPT</p>
               <Display id="watch-h" size="xl">
                 Watch <Accent gold>live</Accent>
               </Display>
@@ -481,7 +476,7 @@ export default function HomePage() {
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px, 5vw, 72px)" }}>
             <Reveal style={{ flex: "1 1 260px" }}>
               <Display id="partners-h" size="lg">
-                Our <Accent>partners</Accent>
+                Our <Accent>Partners</Accent>
               </Display>
             </Reveal>
             <Reveal
@@ -517,9 +512,8 @@ export default function HomePage() {
             <Card radius="xl" glow="blue" glowAt="85% 18%" style={{ padding: "clamp(30px, 5vw, 68px)" }}>
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px, 5vw, 72px)" }}>
                 <div style={{ flex: "2 1 420px", display: "flex", flexDirection: "column", gap: 28 }}>
-                  <p style={EYEBROW}>TAKE IT WITH YOU</p>
                   <Display id="app-h" size="lg" style={{ maxWidth: "14ch" }}>
-                    Download the <Accent gold>HC mobile app</Accent>
+                    Download The <Accent gold>HC Mobile App</Accent>
                   </Display>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "18px 26px" }}>
                     <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
@@ -536,7 +530,7 @@ export default function HomePage() {
                           style={{ height: 50, width: "auto", display: "block" }}
                         />
                       </a>
-                      <span style={MONO_SMALL}>UPDATE AVAILABLE</span>
+                      <span style={MONO_SMALL}>Update Available</span>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
                       <a
@@ -552,7 +546,7 @@ export default function HomePage() {
                           style={{ height: 50, width: "auto", display: "block" }}
                         />
                       </a>
-                      <span style={MONO_SMALL}>AVAILABLE SOON</span>
+                      <span style={MONO_SMALL}>Available soon</span>
                     </div>
                   </div>
                 </div>

@@ -49,21 +49,9 @@ export default function ContactPage() {
       <main>
         <Section aria-label="Contact" width="text" glow="blue" glowAt="26% 12%">
           <Reveal style={{ display: "flex", flexDirection: "column", gap: "clamp(20px, 2.6vw, 32px)" }}>
-            <p style={EYEBROW}>CONTACT</p>
             <Display as="h1" size="hero" style={{ maxWidth: "12ch" }}>
-              Get in <Accent gold>touch</Accent>
+              Contact <Accent gold>Us</Accent>
             </Display>
-            <p
-              style={{
-                margin: 0,
-                maxWidth: "50ch",
-                font: "400 clamp(17px, 1.5vw, 20px)/1.75 var(--font-sans)",
-                color: "var(--fg-muted)",
-                textWrap: "pretty",
-              }}
-            >
-              Write to us and the team will read it. For a testimony, the testimonies page is the quickest route.
-            </p>
           </Reveal>
         </Section>
 
@@ -109,7 +97,6 @@ export default function ContactPage() {
                     }}
                     style={{ display: "flex", flexDirection: "column", gap: 20 }}
                   >
-                    <Display size="sm">Send a message</Display>
                     <div
                       style={{
                         display: "grid",
@@ -165,15 +152,15 @@ export default function ContactPage() {
                       Submit
                     </button>
                     <p style={{ margin: 0, font: "400 14px/1.5 var(--font-sans)", color: "var(--fg-muted)" }}>
-                      This form is not yet wired to a mailbox. Until it is, please use one of the addresses alongside.
+                      Not yet connected to a mailbox. Until it is, please write to the address alongside.
                     </p>
                   </form>
                 ) : (
                   <div role="status" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <Display size="sm">Thank you.</Display>
+                    <Display size="sm">Thanks for submitting!</Display>
                     <p style={{ margin: 0, font: "400 17px/1.6 var(--font-sans)", color: "var(--fg-muted)" }}>
-                      Your message has not been sent anywhere yet &mdash; this form still needs connecting to a
-                      mailbox. Please write to info@hallelujahchallengelive.com in the meantime.
+                      Nothing has been sent yet &mdash; this form still needs connecting to a mailbox. Please write to
+                      info@hallelujahchallengelive.com in the meantime.
                     </p>
                   </div>
                 )}

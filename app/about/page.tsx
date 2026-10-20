@@ -10,15 +10,8 @@ import Section from "@/components/ui/Section";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Hallelujah Challenge is an hour-long online praise programme unto the Lord, convened by Pastor Nathaniel Bassey since 2017.",
+    "Hallelujah Challenge is an hour-long online praise program unto the Lord, convened by Pastor Nathaniel Bassey since 2017.",
 };
-
-const EYEBROW = {
-  margin: 0,
-  font: "500 12px/1 var(--font-mono)",
-  letterSpacing: ".14em",
-  color: "var(--accent)",
-} as const;
 
 const BODY = {
   margin: 0,
@@ -27,6 +20,13 @@ const BODY = {
   textWrap: "pretty",
 } as const;
 
+/**
+ * Wording here is verbatim from hallelujahchallengelive.com/about-6.
+ *
+ * It is reproduced as published, including "hold daily", "breakthrough",
+ * "Hallenge Challenge" and "is to praise of God" — all of which read as slips
+ * but are what the site says. Corrections belong with the ministry, not here.
+ */
 export default function Page() {
   return (
     <>
@@ -37,83 +37,80 @@ export default function Page() {
       <main>
         <Section aria-label="About" width="text" glow="blue" glowAt="20% 12%">
           <Reveal style={{ display: "flex", flexDirection: "column", gap: "clamp(20px, 2.6vw, 32px)" }}>
-            <p style={EYEBROW}>ABOUT</p>
             <Display as="h1" size="hero" style={{ maxWidth: "13ch" }}>
               The Hallelujah <Accent gold>Challenge</Accent>
             </Display>
             <p style={{ ...BODY, maxWidth: "56ch" }}>
-              Hallelujah Challenge is an hour-long online praise programme unto the Lord. The sessions of praise are
-              held daily during designated periods every year, as God leads the convener, Pastor Nathaniel Bassey.
-              Commencing at 11:59 PM, it features sessions of passionate praise and prayer.
+              Hallelujah Challenge is an hour-long online praise program unto the Lord. The sessions of praise hold
+              daily during designated periods every year, as God leads the convener, Pastor Nathaniel Bassey.
+              Commencing at 11:59PM, it features sessions of passionate praise and prayer.
+            </p>
+            <p style={{ ...BODY, maxWidth: "56ch" }}>
+              Hallelujah Challenge has become a mountain of high praises, fervent prayer, heartfelt worship,
+              deliverance, breakthrough, miracles and signs.
             </p>
           </Reveal>
         </Section>
 
-        <Section aria-labelledby="story-h" tight width="text">
-          <Reveal style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-            <Display id="story-h" size="lg" style={{ maxWidth: "18ch" }}>
-              It began in a <Accent>living room</Accent>
-            </Display>
+        <Section aria-label="How it began" tight width="text">
+          <Reveal style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <p style={BODY}>
-              The Challenge first held in 2017, from 1 to 30 June, following the #tongueschallenge that had run before
-              it. It all started from an Instagram Live video by Nathaniel Bassey, streaming praise and worship from
+              The Challenge first held in 2017 from June 1 - June 30, 2017 and followed the #tongueschallenge that held
+              prior. It all started from an Instagram Live video by Nathaniel Bassey, streaming praise and worship from
               his living room. That initial praise session went on to attract tens of thousands around the world,
               joining online to praise God together.
             </p>
             <p style={BODY}>
-              Editions of the Hallelujah Challenge often, though not always, end with a Festival held at a physical
-              venue. It features a time of praise, intercessory prayer, and many testimonies.
+              Editions of the Hallenge Challenge often (but not always) ends with a Festival, which holds at a physical
+              venue. It features time of praise, intercession prayer and lots of testimonies.
             </p>
             <p style={BODY}>
-              Hallelujah Challenge has become a mountain of high praises, fervent prayer, heartfelt worship,
-              deliverance, breakthroughs, miracles and signs.
-            </p>
-          </Reveal>
-        </Section>
-
-        <Section aria-labelledby="why-h" tight width="text">
-          <Reveal index={0} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-            <p style={EYEBROW}>WHY WE GATHER</p>
-            <Display id="why-h" size="lg" style={{ maxWidth: "20ch" }}>
-              The inspiration of the Challenge is the <Accent gold>praise of God</Accent>
-            </Display>
-            <p style={BODY}>
-              As it is in the scriptures, when believers gather together to offer praise, God is provoked to do more.
-              Testimonies arise, and judgment is rendered upon the enemy. No surprise, then, that the key scripture of
-              the Challenge is Acts 16:25&ndash;26 &mdash; Paul and Silas praying and singing praises at midnight, and
-              the foundations of the prison shaken, every door opened and every band loosed.
+              The primary inspiration of the Challenge is to praise of God. As it is in scriptures, when believers
+              gather together to offer praise, God is provoked to do more. Testimonies arise and judgment is rendered
+              upon the enemy. No surprise why the key scripture of the Challenge are:
             </p>
           </Reveal>
 
-          <Reveal index={1} style={{ marginTop: "clamp(32px, 4vw, 52px)" }}>
+          <Reveal index={1} style={{ marginTop: "clamp(28px, 4vw, 44px)" }}>
             <Card radius="lg" glow="gold" glowAt="12% 0%" style={{ padding: "clamp(28px, 4vw, 48px)" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                <p style={{ ...EYEBROW, color: "var(--ember)" }}>SINCE 2017</p>
-                <p
+              <figure style={{ margin: 0, display: "flex", flexDirection: "column", gap: 18 }}>
+                <figcaption
+                  style={{ font: "500 12px/1 var(--font-mono)", letterSpacing: ".14em", color: "var(--accent)" }}
+                >
+                  ACTS 16:25-26
+                </figcaption>
+                <blockquote
                   style={{
                     margin: 0,
                     fontFamily: "var(--font-display)",
-                    fontSize: "clamp(23px, 2.6vw, 38px)",
-                    lineHeight: 1.33,
+                    fontSize: "clamp(21px, 2.3vw, 32px)",
+                    lineHeight: 1.38,
                     color: "var(--fg)",
                   }}
                 >
-                  Every edition of the Hallelujah Challenge has been confirmed with testimonies, many so shocking that
-                  they are hard to share publicly. <Accent gold>God be praised for His marvellous works.</Accent>
-                </p>
-                <ArrowLink href="/testimonies">Read the testimonies</ArrowLink>
-              </div>
+                  25 And at midnight Paul and Silas prayed, and sang praises unto God: and the prisoners heard them.
+                  26 And suddenly there was a great earthquake, so that the foundations of the prison were shaken: and
+                  immediately all the doors were opened, and everyone&rsquo;s bands were loosed
+                </blockquote>
+              </figure>
             </Card>
+          </Reveal>
+
+          <Reveal index={2} style={{ marginTop: "clamp(28px, 4vw, 44px)" }}>
+            <p style={BODY}>
+              Since 2017, every edition of the Hallelujah Challenge has been confirmed with testimonies, many so
+              shocking that they are hard to share publicly. God be praised for His marvelous works.
+            </p>
           </Reveal>
         </Section>
 
         <Section aria-label="Join tonight" tight width="text">
           <Reveal style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
             <ArrowLink href="/watch" variant="gold">
-              Watch live
+              Watch Live
             </ArrowLink>
-            <ArrowLink href="/prayer-points" variant="outline">
-              Tonight&rsquo;s prayer points
+            <ArrowLink href="/testimonies" variant="outline">
+              Read More Testimonies
             </ArrowLink>
           </Reveal>
         </Section>

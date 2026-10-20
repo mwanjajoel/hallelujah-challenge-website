@@ -129,8 +129,8 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           }}
         />
 
-        <Display as="h1" size="hero" style={{ maxWidth: "15ch" }}>
-          Let the peoples <Accent gold>tremble</Accent>
+        <Display as="h1" size="hero" style={{ maxWidth: "17ch" }}>
+          The Lord reigns, Let the peoples <Accent gold>tremble!</Accent>
         </Display>
 
         <p
@@ -142,8 +142,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
             textWrap: "pretty",
           }}
         >
-          He dwells between the cherubim — let the earth be moved. An hour of praise unto the Lord, every night at
-          11:59 PM.
+          He dwells between the cherubim - Let the earth be moved.....
         </p>
 
         {/* Countdown, or the live badge once the session is on air. */}
