@@ -102,7 +102,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
             style={{
               position: "absolute",
               inset: 0,
-              background: `var(--hero-bg) url(${s.image}) center/cover no-repeat`,
+              background: `url(${s.image}) center/cover no-repeat`,
               opacity: i === slide ? "var(--hero-video)" : 0,
               transform: i === slide ? "scale(1.04)" : "scale(1)",
               transition: `opacity 1.6s var(--ease), transform ${SLIDE_MS + 1600}ms linear`,
