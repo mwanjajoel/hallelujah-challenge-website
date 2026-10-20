@@ -75,8 +75,7 @@ export default function HomePage() {
   const storyIo = useRef<IntersectionObserver | null>(null);
   const shader = useRef<ShaderHandle | null>(null);
 
-  const { live, rem, scheduled } =
-    now === null ? { live: false, rem: 0, scheduled: true } : session(now, mode);
+  const { live, rem } = now === null ? { live: false, rem: 0 } : session(now, mode);
   const { hh, mm, ss } = now === null ? { hh: "--", mm: "--", ss: "--" } : countdown(rem);
   const timerLabel = now === null ? "Countdown to tonight's session" : +hh + " hours, " + +mm + " minutes";
 
@@ -134,7 +133,7 @@ export default function HomePage() {
       </div>
 
       <main>
-        <Hero live={live} scheduled={scheduled} hh={hh} mm={mm} ss={ss} timerLabel={timerLabel} />
+        <Hero live={live} hh={hh} mm={mm} ss={ss} timerLabel={timerLabel} />
 
         {/* A slow ambient strip, so the page has a pulse before the reading starts. */}
         <div style={{ padding: "clamp(8px, 2vw, 20px) 0 clamp(24px, 4vw, 48px)" }}>

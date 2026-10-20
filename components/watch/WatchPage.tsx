@@ -9,7 +9,6 @@ import Card from "@/components/ui/Card";
 import Display, { Accent } from "@/components/ui/Display";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
-import { CURRENT } from "@/lib/edition";
 import { countdown, session } from "@/lib/session";
 import { useNow, useSessionMode } from "@/lib/useSessionClock";
 
@@ -33,11 +32,35 @@ const PLATFORMS: Array<[name: string, handle: string, url: string]> = [
   ["HC App", "Official HC app", PLAY_STORE_URL],
 ];
 
+/**
+ * The current edition, and the only one listed.
+ *
+ * Every day below is a real broadcast: the thirteen ids were each checked
+ * against YouTube and are Days 1 to 13 of "HALLELUJAH CHALLENGE || OCT 2026"
+ * on the ministry's own channel, in order. The start date is Day 1's upload
+ * date, and the length is how many days actually aired.
+ *
+ * Three further editions used to sit beside this one — June 2026, January
+ * 2026 and October 2025 — each rendering twenty-six day tiles with a date on
+ * every one. None of those dates or day counts could be confirmed against
+ * anything the ministry publishes, so rather than keep an archive the site
+ * was inventing, earlier editions are a link to the channel.
+ */
+const EDITION = {
+  label: "October 2026 · The Lord Reigns",
+  start: Date.UTC(2026, 9, 5),
+  ids: [
+    "-saBS2ggyi4", "Dvp9hyZW2Ys", "2Dxd2wwRLLc", "hUWaCZzU31U", "SN4z3UyvFVE",
+    "18KAjo4RmVU", "adUtqYoDOw0", "i0O00TOi-Kw", "FmECe4ZcXB0", "CCDHi8mjfb4",
+    "rkc184yQ-kM", "NyDXTX1ghK0", "h7quyM65iVk",
+  ],
+};
+
 /** The newest session in the current edition — its thumbnail is the player's
     artwork, so the panel shows the real broadcast rather than a mock-up. */
 /* The player panel keeps its dark poster and scrim in both themes, so what
    sits on it cannot use --fg or --fg-muted: in light mode those are dark ink
-   and vanish. (The "remind me" link had been doing exactly that.) */
+   on a dark panel. The "remind me" link had been invisible there. */
 const ON_PLAYER = "rgba(255,255,255,.96)";
 const ON_PLAYER_DIM = "rgba(255,255,255,.66)";
 const ON_PLAYER_LINE = "rgba(255,255,255,.38)";
@@ -76,8 +99,7 @@ export default function WatchPage() {
   const [platform, setPlatform] = useState(0);
   const [day, setDay] = useState("all");
 
-  const { live, rem, scheduled } =
-    now === null ? { live: false, rem: 0, scheduled: true } : session(now, mode);
+  const { live, rem } = now === null ? { live: false, rem: 0 } : session(now, mode);
   const { hh, mm, ss } = now === null ? { hh: "--", mm: "--", ss: "--" } : countdown(rem);
   const timerLabel =
     now === null ? "Tonight's session countdown" : "Tonight's session begins in " + +hh + " hours, " + +mm + " minutes";
@@ -92,7 +114,7 @@ export default function WatchPage() {
           timeZoneName: "short",
         });
 
-  const ed = CURRENT;
+  const ed = EDITION;
 
   // Each tile is one real broadcast. There used to be a runtime here too,
   // printed as "1:28:43" and the like — but it was `5200 + ((day * 7919 +
@@ -147,23 +169,11 @@ export default function WatchPage() {
               </Display>
             </div>
             <p style={{ margin: 0, color: "var(--fg-muted)", font: "400 16px/1.5 var(--font-sans)" }}>
-              {scheduled ? (
-                <>
-                  Every night at 11:59 PM WAT &#183;{" "}
-                  <strong suppressHydrationWarning style={{ color: "var(--fg)", fontWeight: 600 }}>
-                    {localTime}
-                  </strong>{" "}
-                  where you are
-                </>
-              ) : (
-                <>
-                  Sessions run at 11:59 PM WAT &#183;{" "}
-                  <strong suppressHydrationWarning style={{ color: "var(--fg)", fontWeight: 600 }}>
-                    {localTime}
-                  </strong>{" "}
-                  where you are, through the nights of an edition
-                </>
-              )}
+              Every night at 11:59 PM WAT &#183;{" "}
+              <strong suppressHydrationWarning style={{ color: "var(--fg)", fontWeight: 600 }}>
+                {localTime}
+              </strong>{" "}
+              where you are
             </p>
           </Reveal>
 
@@ -237,54 +247,6 @@ export default function WatchPage() {
                         &#9654;
                       </a>
                     </>
-                  ) : !scheduled ? (
-                    /* No edition is running, so there is no time to show.
-                       The panel points at the thirteen nights that exist
-                       rather than counting to a night that does not. */
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 14,
-                        textAlign: "center",
-                        padding: 20,
-                      }}
-                    >
-                      <p style={{ ...EYEBROW, color: ON_PLAYER_DIM }}>NO SESSION TONIGHT</p>
-                      <p
-                        style={{
-                          margin: 0,
-                          maxWidth: "24ch",
-                          font: "400 clamp(21px, 2.4vw, 32px)/1.35 var(--font-display)",
-                          color: ON_PLAYER,
-                        }}
-                      >
-                        The {ed.label.split(" \u00b7 ")[0]} edition has ended.
-                      </p>
-                      <a
-                        href={STREAMS_URL}
-                        target="_blank"
-                        rel="noopener"
-                        className="hc-t hc-pill-outline"
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          minHeight: 44,
-                          padding: "0 22px",
-                          borderRadius: "var(--r-pill)",
-                          border: "1px solid " + ON_PLAYER_LINE,
-                          color: ON_PLAYER,
-                          font: "500 15px/1 var(--font-sans)",
-                          textDecoration: "none",
-                        }}
-                      >
-                        All {ed.ids.length} nights on YouTube
-                      </a>
-                    </div>
                   ) : (
                     <div
                       role="timer"
