@@ -1,0 +1,15 @@
+{
+  // A static-assets Worker: there is no `main` script, because every route in
+  // this site prerenders to a file and nothing needs to run on request.
+  // `npm run build` writes ./out, and public/.assetsignore keeps the 39 MB of
+  // development reference imagery out of the upload.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hallelujah-challenge",
+  "compatibility_date": "2026-10-21",
+  "assets": {
+    "directory": "./out",
+    // Serves out/404.html for anything unmatched, which is the exported
+    // Next.js not-found page rather than Cloudflare's default.
+    "not_found_handling": "404-page"
+  }
+}

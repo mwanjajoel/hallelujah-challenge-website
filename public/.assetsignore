@@ -1,0 +1,5 @@
+# Not served. public/assets/site/ holds the live site's imagery at original
+# resolution as a development reference — 39 MB that no page links to. It is
+# kept in the repository (content/images.md maps each file) but excluded from
+# the deployed bundle.
+assets/site/*
