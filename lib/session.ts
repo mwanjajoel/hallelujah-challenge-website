@@ -1,37 +1,57 @@
 /**
- * Session state for the nightly Hallelujah Challenge broadcast.
+ * Session state for the Hallelujah Challenge broadcast.
  *
  * The programme commences at 11:59 PM WAT, which is 22:59 UTC, and runs for an
  * hour. Both the home page and the watch page derive their countdown and their
  * "live" badges from this.
+ *
+ * It used to assume a session every night in perpetuity: take today, set
+ * 22:59, roll to tomorrow once that hour had passed. That is why the site
+ * promised a broadcast on nights there was none — the October 2026 edition
+ * ended on the 17th and the hero kept counting. The schedule now comes from
+ * the edition calendar, and when no edition covers tonight the honest answer
+ * is that nothing is scheduled rather than a number.
  */
+
+import { START_UTC_HOUR, START_UTC_MINUTE, nextNight } from "./edition";
 
 export type SessionMode = "auto" | "countdown" | "live";
 
 export interface SessionState {
-  /** True while tonight's session is on air. */
+  /** True while a session is on air. */
   live: boolean;
   /** Milliseconds until the next session starts. Zero while live. */
   rem: number;
+  /** False between editions, when there is no next session to count to. */
+  scheduled: boolean;
 }
 
 const HOUR = 3600000;
 const DAY = 86400000;
 
-export function session(now: number, mode: SessionMode = "auto"): SessionState {
-  if (mode === "live") return { live: true, rem: 0 };
-
+/** Tonight's 22:59 UTC, or tomorrow's once tonight's session has finished. */
+function nextClockTime(now: number): number {
   const d = new Date(now);
-  let t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 22, 59, 0);
-  if (now >= t + HOUR) t += DAY;
+  const t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), START_UTC_HOUR, START_UTC_MINUTE, 0);
+  return now >= t + HOUR ? t + DAY : t;
+}
 
-  let live = now >= t;
-  if (live && mode === "countdown") {
-    t += DAY;
-    live = false;
+export function session(now: number, mode: SessionMode = "auto"): SessionState {
+  if (mode === "live") return { live: true, rem: 0, scheduled: true };
+
+  // The override exists to demonstrate the countdown out of season, so it
+  // ignores the calendar on purpose — otherwise it would show the very
+  // off-season state it is there to get past.
+  if (mode === "countdown") {
+    let t = nextClockTime(now);
+    if (now >= t) t += DAY;
+    return { live: false, rem: Math.max(0, t - now), scheduled: true };
   }
 
-  return { live, rem: Math.max(0, t - now) };
+  const t = nextNight(now);
+  if (t === null) return { live: false, rem: 0, scheduled: false };
+
+  return { live: now >= t, rem: Math.max(0, t - now), scheduled: true };
 }
 
 export const pad = (n: number) => String(n).padStart(2, "0");

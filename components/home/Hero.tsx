@@ -38,6 +38,8 @@ const SLIDE_MS = 6500;
 
 interface Props {
   live: boolean;
+  /** False between editions: there is no session tonight to count down to. */
+  scheduled: boolean;
   hh: string;
   mm: string;
   ss: string;
@@ -53,7 +55,7 @@ interface Props {
  * scroll past. What is left is the one thing only the hero can say: the theme,
  * the verse behind it, and when tonight's session begins.
  */
-export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
+export default function Hero({ live, scheduled, hh, mm, ss, timerLabel }: Props) {
   // The outgoing slide is tracked as well as the incoming one. A plain
   // crossfade — one layer to 0 while another comes up from 0 — leaves both
   // part-way at the midpoint, so the page colour shows between them and the
@@ -259,6 +261,24 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
             />
             On air now
           </p>
+        ) : !scheduled ? (
+          /* Between editions. The countdown was the loudest thing on the
+             page, and for three days after the October edition closed it was
+             counting to a broadcast that was not coming. There is no date to
+             put here until the next edition is announced, so the hero says
+             what is true and sends people to the thirteen nights that exist. */
+          <p
+            className="hc-hero-type"
+            style={{
+              margin: 0,
+              maxWidth: "34ch",
+              font: "400 clamp(19px, 2vw, 26px)/1.5 var(--font-display)",
+              color: "var(--fg)",
+              textWrap: "pretty",
+            }}
+          >
+            The October edition has ended. The next one will be announced here.
+          </p>
         ) : (
           <p
             role="timer"
@@ -283,7 +303,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }}>
           <ArrowLink href="/watch" variant="gold">
-            Watch live
+            {scheduled ? "Watch live" : "Watch the replays"}
           </ArrowLink>
           <ArrowLink href="#about" variant="outline">
             About the Challenge

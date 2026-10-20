@@ -41,7 +41,8 @@ export default function StickyBar() {
   const mode = useSessionMode();
   const shown = useShowAfterHero();
 
-  const { live, rem } = now === null ? { live: false, rem: 0 } : session(now, mode);
+  const { live, rem, scheduled } =
+    now === null ? { live: false, rem: 0, scheduled: true } : session(now, mode);
   const { hh, mm, ss } = now === null ? { hh: "--", mm: "--", ss: "--" } : countdown(rem);
 
   return (
@@ -101,6 +102,19 @@ export default function StickyBar() {
             />
             ON AIR NOW
           </span>
+        ) : !scheduled ? (
+          /* Between editions. The bar still belongs here — the replays are
+             worth the trip — but it cannot promise a session tonight. */
+          <span
+            style={{
+              font: "500 12px/1 var(--font-mono)",
+              letterSpacing: ".08em",
+              color: "var(--fg-muted)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            BETWEEN EDITIONS
+          </span>
         ) : (
           <span
             style={{
@@ -145,7 +159,7 @@ export default function StickyBar() {
             whiteSpace: "nowrap",
           }}
         >
-          Watch live
+          {scheduled ? "Watch live" : "Watch replays"}
         </Link>
       </div>
     </div>

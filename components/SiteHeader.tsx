@@ -100,7 +100,10 @@ export default function SiteHeader({ active = "home" }: { active?: NavKey }) {
             ON AIR NOW · WATCH LIVE
           </Link>
         ) : (
-          <span>AN HOUR OF PRAISE, NIGHTLY AT 11:59 PM WAT</span>
+          // "NIGHTLY" made the same promise the countdown used to: the sessions
+          // run through an edition, not every night of the year. "Commencing at
+          // 11:59 PM" is the ministry's own phrase for it.
+          <span>AN HOUR OF PRAISE, COMMENCING AT 11:59 PM WAT</span>
         )}
       </div>
 
