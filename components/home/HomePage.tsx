@@ -533,19 +533,17 @@ export default function HomePage() {
                       <span style={MONO_SMALL}>Update Available</span>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                      <a
-                        href="https://apps.apple.com/us/app/hallelujah-challenge/id6744338877"
-                        className="hc-t"
-                        style={{ display: "inline-flex", minHeight: 44, alignItems: "center" }}
+                      <span
+                        style={{ display: "inline-flex", minHeight: 44, alignItems: "center", opacity: 0.55 }}
                       >
                         <img
                           src={W + "8120e4_ad65c59337e34eea9987568661953426~mv2.png/v1/fill/w_375,h_123,al_c,q_90,enc_auto/app-store.png"}
-                          alt="Download on the App Store"
+                          alt="Download on the App Store — available soon"
                           width={125}
                           height={41}
                           style={{ height: 50, width: "auto", display: "block" }}
                         />
-                      </a>
+                      </span>
                       <span style={MONO_SMALL}>Available soon</span>
                     </div>
                   </div>

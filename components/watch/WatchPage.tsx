@@ -12,12 +12,19 @@ import Section from "@/components/ui/Section";
 import { countdown, pad, session } from "@/lib/session";
 import { useNow, useSessionMode } from "@/lib/useSessionClock";
 
-const PLATFORMS: Array<[name: string, handle: string]> = [
-  ["YouTube", "Nathaniel Bassey Main"],
+const STREAMS_URL = "https://www.youtube.com/@NathanielBasseyMain/streams";
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.hallelujahchallengelive&hl=en";
+
+/** Name, handle, and where "Open in …" should go. Only the destinations that
+    could be verified carry a URL; the rest render without a link rather than
+    pointing somewhere guessed. */
+const PLATFORMS: Array<[name: string, handle: string, url?: string]> = [
+  ["YouTube", "Nathaniel Bassey Main", STREAMS_URL],
   ["Facebook", "Nathaniel Bassey"],
   ["Instagram Live", "@nathanielblow"],
   ["Mixlr audio", "Audio stream, low data"],
-  ["HC App", "Official HC app"],
+  ["HC App", "Official HC app", PLAY_STORE_URL],
 ];
 
 interface Edition {
@@ -47,8 +54,6 @@ const EDITIONS: Record<string, Edition> = {
     artwork, so the panel shows the real broadcast rather than a mock-up. */
 const LATEST_ID = "h7quyM65iVk";
 const LATEST_POSTER = `https://i.ytimg.com/vi/${LATEST_ID}/maxresdefault.jpg`;
-const STREAMS_URL = "https://www.youtube.com/@NathanielBasseyMain/streams";
-
 /** Editions before this one have no per-day video, so they share a still from
     the gathering rather than a striped placeholder. */
 const REPLAY_FALLBACK =
@@ -126,7 +131,7 @@ export default function WatchPage() {
   }).reverse();
 
   const replays = day === "all" ? all : all.filter((r) => String(r.day) === day);
-  const [platformName, platformHandle] = PLATFORMS[platform];
+  const [platformName, platformHandle, platformUrl] = PLATFORMS[platform];
 
   return (
     <>
@@ -332,7 +337,11 @@ export default function WatchPage() {
                       Now showing: <strong style={{ color: "var(--fg)", fontWeight: 600 }}>{platformName}</strong> &#183;{" "}
                       {platformHandle}
                     </p>
-                    <ArrowLink href="#">Open in {platformName}</ArrowLink>
+                    {platformUrl && (
+                      <ArrowLink href={platformUrl} external>
+                        Open in {platformName}
+                      </ArrowLink>
+                    )}
                   </div>
                 </Card>
               </Reveal>
