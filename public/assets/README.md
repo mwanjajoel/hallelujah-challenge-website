@@ -1,9 +1,12 @@
-# Placeholder assets
+# Assets
 
-`hc-logo.png` and `hc-theme-the-lord-reigns.png` in this folder are **placeholders**
-at the correct pixel dimensions, written only so the layout can be checked.
+`hc-logo.png` is the real artwork.
 
-Replace both with the real files exported from the Claude Design project
-"Hallelujah Challenge website rebuild", where they live at `assets/hc-logo.png`
-and `assets/hc-theme-the-lord-reigns.png`. Keep the same filenames — the code
-references `/assets/hc-logo.png` and `/assets/hc-theme-the-lord-reigns.png`.
+`hc-theme-the-lord-reigns.png` is still a **placeholder** at the correct pixel
+dimensions (654×626), written only so the layout could be checked. Replace it
+with the real file exported from the Claude Design project "Hallelujah
+Challenge website rebuild", where it lives at
+`assets/hc-theme-the-lord-reigns.png`.
+
+Keep the filename — the code references `/assets/hc-theme-the-lord-reigns.png`
+from the hero, the about section and the footer.
