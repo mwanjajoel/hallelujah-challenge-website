@@ -1,12 +1,30 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ArrowLink from "@/components/ui/ArrowLink";
 import Display, { Accent } from "@/components/ui/Display";
 
 const POSTER =
   "https://static.wixstatic.com/media/e178bc_74952a632df64354bc7e4c52e9a97409f000.jpg/v1/fill/w_2560,h_1440,al_c,q_90,enc_auto/hc-hero-poster.jpg";
 const VIDEO = "https://video.wixstatic.com/video/e178bc_74952a632df64354bc7e4c52e9a97409/1080p/mp4/file.mp4";
+
+const W = "https://static.wixstatic.com/media/";
+const FILL = "/v1/fill/w_2048,h_1152,al_c,q_85,enc_auto/";
+
+/**
+ * The backdrop cycle. The opening frame is the footage; the rest are stills
+ * from the gatherings. Each carries a description because the slide controls
+ * name them — the images themselves are decorative behind the headline.
+ */
+const SLIDES: Array<{ label: string; image: string; video?: boolean }> = [
+  { label: "Tonight's session", image: POSTER, video: true },
+  { label: "The gathering", image: W + "e178bc_9c4ea1afa58c4409a0e40740a4bc966b~mv2.jpg" + FILL + "DSC09945.jpg" },
+  { label: "Hands raised in praise", image: W + "e178bc_afe198aca8994dec8029d557b7c47a6c~mv2.jpg" + FILL + "DSC03171.jpg" },
+  { label: "The Festival", image: W + "e178bc_c8afc65f02014fd985ef729ac3fd673df000.jpg" + FILL + "hc-creating.jpg" },
+  { label: "Worship through the night", image: W + "e178bc_5d0c5c6531da4fdeb0a5ac1ac3fd6ce5~mv2.jpg" + FILL + "DSC03192.jpg" },
+];
+
+const SLIDE_MS = 6500;
 
 interface Props {
   live: boolean;
@@ -26,6 +44,22 @@ interface Props {
  * the verse behind it, and when tonight's session begins.
  */
 export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
+  const [slide, setSlide] = useState(0);
+  const paused = useRef(false);
+  const reduced = useRef(false);
+
+  // Crossfade on a timer. Opacity only: transitioning visibility leaves
+  // descendants stale in Chromium, which is what blanked the original
+  // carousel on this page.
+  useEffect(() => {
+    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced.current) return;
+    const id = setInterval(() => {
+      if (!paused.current) setSlide((i) => (i + 1) % SLIDES.length);
+    }, SLIDE_MS);
+    return () => clearInterval(id);
+  }, []);
+
   const setVideo = useCallback((el: HTMLVideoElement | null) => {
     if (!el) return;
     // React does not reliably emit the muted attribute, and Chrome blocks
@@ -56,20 +90,40 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
         padding: "clamp(56px, 8vw, 110px) var(--gutter) clamp(72px, 10vw, 130px)",
       }}
     >
-      {/* Backdrop: footage, then enough gradient to keep text legible. */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: `var(--hero-bg) url(${POSTER}) center/cover no-repeat` }}>
-        <video
-          ref={setVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={POSTER}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: "var(--hero-video)" }}
-        >
-          <source src={VIDEO} type="video/mp4" />
-        </video>
+      {/* Backdrop: a crossfading stack, then enough gradient to keep text
+          legible. The footage is the first frame of the cycle. */}
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", inset: 0, background: "var(--hero-bg)" }}
+      >
+        {SLIDES.map((s, i) => (
+          <div
+            key={s.image}
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: `var(--hero-bg) url(${s.image}) center/cover no-repeat`,
+              opacity: i === slide ? "var(--hero-video)" : 0,
+              transform: i === slide ? "scale(1.04)" : "scale(1)",
+              transition: `opacity 1.6s var(--ease), transform ${SLIDE_MS + 1600}ms linear`,
+            }}
+          >
+            {s.video && (
+              <video
+                ref={setVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                poster={POSTER}
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+              >
+                <source src={VIDEO} type="video/mp4" />
+              </video>
+            )}
+          </div>
+        ))}
       </div>
       <div
         aria-hidden="true"
@@ -197,6 +251,43 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
           <ArrowLink href="#about" variant="outline">
             About the Challenge
           </ArrowLink>
+        </div>
+
+        {/* Slide controls. The images behind the headline are decorative, but
+            the controls are not, so each is named and focusable. */}
+        <div
+          role="tablist"
+          aria-label="Backdrop images"
+          style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}
+          onMouseEnter={() => {
+            paused.current = true;
+          }}
+          onMouseLeave={() => {
+            paused.current = false;
+          }}
+        >
+          {SLIDES.map((s, i) => (
+            <button
+              key={s.image}
+              type="button"
+              role="tab"
+              aria-selected={i === slide}
+              aria-label={s.label}
+              title={s.label}
+              onClick={() => setSlide(i)}
+              className="hc-t"
+              style={{
+                width: i === slide ? 30 : 9,
+                height: 9,
+                padding: 0,
+                borderRadius: "var(--r-pill)",
+                border: 0,
+                cursor: "pointer",
+                background: i === slide ? "var(--accent-fill)" : "var(--hairline-strong)",
+                transition: "width var(--d-hover) var(--ease), background-color var(--d-hover) var(--ease)",
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>
