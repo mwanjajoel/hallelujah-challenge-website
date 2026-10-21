@@ -66,7 +66,10 @@ const ON_PLAYER_DIM = "rgba(255,255,255,.66)";
 const ON_PLAYER_LINE = "rgba(255,255,255,.38)";
 
 const LATEST_ID = "h7quyM65iVk";
-const LATEST_POSTER = `https://i.ytimg.com/vi/${LATEST_ID}/maxresdefault.jpg`;
+/* hqdefault, not maxresdefault: this is the largest contentful paint on the
+   route, and maxres cost 267 KB to paint behind an 88% scrim and a 3 px blur,
+   which throws that resolution away before anyone sees it. hqdefault is 17 KB. */
+const LATEST_POSTER = `https://i.ytimg.com/vi/${LATEST_ID}/hqdefault.jpg`;
 
 const SELECT: CSSProperties = {
   minHeight: 48,
