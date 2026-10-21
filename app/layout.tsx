@@ -38,10 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="preload"
           as="font"
           type="font/woff2"
-          href="/assets/fonts/instrumentserif-normal.woff2"
+          href="/fonts/instrumentserif-normal.woff2"
           crossOrigin=""
         />
-        <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/geist-normal.woff2" crossOrigin="" />
+        <link rel="preload" as="font" type="font/woff2" href="/fonts/geist-normal.woff2" crossOrigin="" />
       </head>
       <body>
         {children}

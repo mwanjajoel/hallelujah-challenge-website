@@ -1,0 +1,27 @@
+# Cache policy for Cloudflare Workers Assets.
+#
+# The default for every file is `public, max-age=0, must-revalidate`, which is
+# right for the HTML and wrong for everything whose URL already identifies its
+# contents. Left alone, a returning visitor pays a conditional request for each
+# of the twenty chunks and every image before reusing any of them.
+#
+# Rules are applied in order, so the narrower ones come last.
+
+# Anything not named below: a day in the browser, then a week where a stale
+# copy may be served while a fresh one is fetched. This covers the artwork in
+# /assets, which is NOT content-hashed — hc-theme-the-lord-reigns.webp is the
+# October 2026 theme and will be replaced in place when the edition changes, so
+# a year of immutable would leave returning visitors on last season's art.
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Next.js puts a content hash in these filenames precisely so they can be kept
+# forever: if the contents change, the URL changes. immutable also tells the
+# browser not to revalidate on reload.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The webfonts are fixed binaries cut from a fixed subset. If one is ever
+# swapped, give the new file a new name rather than shortening this.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
