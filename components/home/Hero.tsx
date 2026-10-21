@@ -4,8 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ArrowLink from "@/components/ui/ArrowLink";
 import Display, { Accent } from "@/components/ui/Display";
 
+/* w_1600, not w_2560. It is a backdrop behind a scrim, and the larger crop was
+   being fetched in full on a phone. */
 const POSTER =
-  "https://static.wixstatic.com/media/e178bc_74952a632df64354bc7e4c52e9a97409f000.jpg/v1/fill/w_2560,h_1440,al_c,q_90,enc_auto/hc-hero-poster.jpg";
+  "https://static.wixstatic.com/media/e178bc_74952a632df64354bc7e4c52e9a97409f000.jpg/v1/fill/w_1600,h_900,al_c,q_85,enc_auto/hc-hero-poster.jpg";
 /* 480p, not 1080p. The footage plays behind the hero scrim at well under half
    opacity and is decorative; 1080p cost 2.28 MB against 469 MB-free kilobytes
    here, and it was the heaviest thing on the page by a factor of sixteen. */
@@ -68,7 +70,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
   // loads, and the first slide already shows its poster frame, so there is
   // nothing to look at in the meantime and nothing to gain from racing it
   // against the largest paint.
-  const [videoReady, setVideoReady] = useState(false);
+  const [settled, setSettled] = useState(false);
   const paused = useRef(false);
   const reduced = useRef(false);
 
@@ -84,7 +86,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
   }, []);
 
   useEffect(() => {
-    const idle = () => setVideoReady(true);
+    const idle = () => setSettled(true);
     const w = window as typeof window & {
       requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
       cancelIdleCallback?: (id: number) => void;
@@ -136,6 +138,14 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
         padding: "clamp(56px, 8vw, 110px) var(--gutter) clamp(72px, 10vw, 130px)",
       }}
     >
+      {/* The first backdrop is the largest contentful paint on this page, and
+          it is a CSS background rather than an <img>, which the preload
+          scanner does not look inside. Without this link the browser only
+          discovered it after the stylesheet and layout: load delay measured
+          3690 ms, 58% of LCP, for a 28 KB image. With it, load delay is
+          168 ms. React hoists the link into the head. */}
+      <link rel="preload" as="image" href={SLIDES[0].image} fetchPriority="high" />
+
       {/* Backdrop: a crossfading stack, then enough gradient to keep text
           legible. The footage is the first frame of the cycle. */}
       <div
@@ -162,7 +172,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
               transition: `opacity 1.6s var(--ease), transform ${SLIDE_MS + 1600}ms linear`,
             }}
           >
-            {s.video && videoReady && (
+            {s.video && settled && (
               <video
                 ref={setVideo}
                 autoPlay
