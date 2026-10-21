@@ -202,11 +202,17 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
 
         {/* The theme artwork carries the "The Lord reigns" line, so the
             headline beneath it continues the verse rather than repeating it. */}
+        {/* This is the largest contentful paint on the home page, so its weight
+            is the metric. It was a 1308x1252 lossless PNG at 912 KB, laid out
+            at 360 CSS px or less — about twice the pixels it can ever show.
+            720x689 WebP with alpha is 90 KB and identical on screen. The PNG
+            stays in the repository as the source of record and is excluded
+            from the deploy by public/.assetsignore. */}
         <img
-          src="/assets/hc-theme-the-lord-reigns.png"
+          src="/assets/hc-theme-the-lord-reigns.webp"
           alt="The Lord Reigns — October 2026 theme"
-          width={654}
-          height={626}
+          width={720}
+          height={689}
           className="hc-float"
           style={{
             width: "clamp(190px, 26vw, 360px)",

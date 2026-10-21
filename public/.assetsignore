@@ -3,3 +3,7 @@
 # kept in the repository (content/images.md maps each file) but excluded from
 # the deployed bundle.
 assets/site/*
+
+# Source of record for the hero artwork. The site serves the 90 KB WebP
+# beside it; this 912 KB PNG is kept for re-encoding, not for shipping.
+assets/hc-theme-the-lord-reigns.png
