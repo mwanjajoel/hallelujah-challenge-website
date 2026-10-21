@@ -6,7 +6,10 @@ import Display, { Accent } from "@/components/ui/Display";
 
 const POSTER =
   "https://static.wixstatic.com/media/e178bc_74952a632df64354bc7e4c52e9a97409f000.jpg/v1/fill/w_2560,h_1440,al_c,q_90,enc_auto/hc-hero-poster.jpg";
-const VIDEO = "https://video.wixstatic.com/video/e178bc_74952a632df64354bc7e4c52e9a97409/1080p/mp4/file.mp4";
+/* 480p, not 1080p. The footage plays behind the hero scrim at well under half
+   opacity and is decorative; 1080p cost 2.28 MB against 469 MB-free kilobytes
+   here, and it was the heaviest thing on the page by a factor of sixteen. */
+const VIDEO = "https://video.wixstatic.com/video/e178bc_74952a632df64354bc7e4c52e9a97409/480p/mp4/file.mp4";
 
 const W = "https://static.wixstatic.com/media/";
 const FILL = "/v1/fill/w_2048,h_1152,al_c,q_85,enc_auto/";
@@ -61,6 +64,11 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
   // outgoing frame opaque underneath and bringing the new one up on top of it
   // means there is never a gap for the background to come through.
   const [[prev, slide], setPair] = useState<[number, number]>([0, 0]);
+  // The footage waits for an idle moment. It is the heaviest thing the hero
+  // loads, and the first slide already shows its poster frame, so there is
+  // nothing to look at in the meantime and nothing to gain from racing it
+  // against the largest paint.
+  const [videoReady, setVideoReady] = useState(false);
   const paused = useRef(false);
   const reduced = useRef(false);
 
@@ -73,6 +81,20 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
       if (!paused.current) setPair(([, cur]) => [cur, (cur + 1) % SLIDES.length]);
     }, SLIDE_MS);
     return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const idle = () => setVideoReady(true);
+    const w = window as typeof window & {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(idle, { timeout: 4000 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(idle, 2500);
+    return () => clearTimeout(t);
   }, []);
 
   const setVideo = useCallback((el: HTMLVideoElement | null) => {
@@ -91,6 +113,15 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
     const p = el.play();
     if (p && p.catch) p.catch(() => {});
   }, []);
+
+  // All five backdrops used to carry a background-image from the first render,
+  // so the page opened five requests to a third-party CDN before it had
+  // painted anything, for four pictures nobody could see yet. Only the slide
+  // on screen, the one fading out and the one up next are fetched; the next
+  // one is included so it is decoded before it has to appear. Derived rather
+  // than remembered, which keeps it honest when the dots jump around, and the
+  // browser cache makes coming back to a slide free.
+  const wanted = [prev, slide, (slide + 1) % SLIDES.length];
 
   return (
     <section
@@ -121,7 +152,7 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
             style={{
               position: "absolute",
               inset: 0,
-              background: `url(${s.image}) center/cover no-repeat`,
+              background: wanted.includes(i) ? `url(${s.image}) center/cover no-repeat` : undefined,
               // The outgoing frame stays opaque but drops below the incoming
               // one, so the fade happens over a picture rather than over the
               // page.
@@ -131,14 +162,14 @@ export default function Hero({ live, hh, mm, ss, timerLabel }: Props) {
               transition: `opacity 1.6s var(--ease), transform ${SLIDE_MS + 1600}ms linear`,
             }}
           >
-            {s.video && (
+            {s.video && videoReady && (
               <video
                 ref={setVideo}
                 autoPlay
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="none"
                 poster={POSTER}
                 style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
               >
