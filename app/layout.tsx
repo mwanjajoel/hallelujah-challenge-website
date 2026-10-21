@@ -24,18 +24,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "(function(){try{if(localStorage.getItem('hc-theme')==='dark'){document.documentElement.dataset.theme='dark'}}catch(e){}})()",
           }}
         />
-        {/* Loaded as a stylesheet link rather than through next/font: the styles
-            name "Geist" and "Geist Mono" literally in many inline `font:`
+        {/* The faces are declared in globals.css and served from this origin.
+            They are not loaded through next/font because the styles name
+            "Geist" and "Geist Mono" literally in many inline `font:`
             shorthands, and next/font would rename the families.
 
-            Instrument Serif carries the display type — regular and italic only,
-            which is all the design uses. */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+            The two faces that paint first are preloaded: Instrument Serif
+            carries every h1, and Geist carries the body. Without this the
+            browser only discovers them part-way through parsing the
+            stylesheet. The italic and the mono are left to be found normally,
+            since neither appears above the fold. */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400..600&family=Instrument+Serif:ital@0;1&display=swap"
-          rel="stylesheet"
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href="/assets/fonts/instrumentserif-normal.woff2"
+          crossOrigin=""
         />
+        <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/geist-normal.woff2" crossOrigin="" />
       </head>
       <body>
         {children}
