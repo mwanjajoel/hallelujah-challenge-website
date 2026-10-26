@@ -7,6 +7,29 @@
 #
 # Rules are applied in order, so the narrower ones come last.
 
+# --- Security headers -------------------------------------------------------
+# Applied to everything. These are header names the cache rules below do not
+# set, so the two sets do not collide.
+#
+# About the CSP: script-src has to carry 'unsafe-inline'. This is a static
+# export with no server, so there is no nonce to issue, and the output has six
+# inline scripts — Next's own hydration bootstrap plus the theme script that
+# runs before first paint. That means this CSP does NOT stop cross-site
+# scripting. What it still does is bound where things may come from: no script
+# from another origin, no framing, no plugins, no form posting elsewhere, no
+# base-tag rewrite, and images and media only from the hosts this site really
+# uses. style-src needs 'unsafe-inline' too — the design is built from inline
+# style attributes, 278 of them on the home page alone.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://static.wixstatic.com https://i.ytimg.com https://play.google.com; media-src 'self' https://video.wixstatic.com; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+
+
 # Anything not named below: a day in the browser, then a week where a stale
 # copy may be served while a fresh one is fetched. This covers the artwork in
 # /assets, which is NOT content-hashed — hc-theme-the-lord-reigns.webp is the
